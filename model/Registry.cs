@@ -1,23 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace assignment2 {
     public class Registry {
 
-        public Registry(Member member, Boat boat) {
+        public Registry() {
         }
 
-        public string FirstName { 
-            set; 
-            get; 
+        public List<Boat> Boats {
+            set;
+            get;
         }
 
-        public string LastName { 
-            set; 
-            get; 
-        }
-
-        public int PersonalNr {
-            private set; 
+        public List<Member> Members {
+            set;
             get;
         }
     }

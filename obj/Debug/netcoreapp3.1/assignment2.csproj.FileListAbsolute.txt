@@ -1,0 +1,13 @@
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.exe
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.deps.json
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.runtimeconfig.json
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.runtimeconfig.dev.json
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.dll
+C:\Users\micke\school\1dv607\assignment2\bin\Debug\netcoreapp3.1\assignment2.pdb
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.csprojAssemblyReference.cache
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.csproj.CoreCompileInputs.cache
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.AssemblyInfoInputs.cache
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.AssemblyInfo.cs
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.dll
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.pdb
+C:\Users\micke\school\1dv607\assignment2\obj\Debug\netcoreapp3.1\assignment2.genruntimeconfig.cache

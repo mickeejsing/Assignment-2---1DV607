@@ -10,5 +10,14 @@ namespace assignment2 {
         public Register() {
             
         }
+
+        public bool isInputOptionValid(int input, int from, int to) {
+            
+            if(input >= from && input <= to) {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

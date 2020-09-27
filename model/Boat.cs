@@ -3,9 +3,7 @@ using System;
 namespace assignment2 {
     public class Boat {
 
-        public Boat(Type type, int length) {
-            Type = type;
-            Length = length;
+        public Boat() {
         }
 
         public Type Type { 

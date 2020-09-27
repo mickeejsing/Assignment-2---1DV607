@@ -4,9 +4,12 @@ namespace assignment2 {
     class Program {
         static void Main(string[] args) {
             
-            Boat boat1 = new Boat(Type.Canoe, 5);
-            Console.WriteLine(boat1.Length);
-            Console.WriteLine(boat1.Type);
+            MemberView memberView = new MemberView(new Member());
+            BoatView boatView = new BoatView(new Boat());
+            RegisterView registerView = new RegisterView(new Register());
+
+            Controller controller = new Controller(registerView, memberView, boatView);
+            controller.mainMenu();
 
         }
     }

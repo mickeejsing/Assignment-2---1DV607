@@ -3,10 +3,8 @@ using System;
 namespace assignment2 {
     public class Member {
 
-        public Member(int personalNr, string firstname, string lastname) {
-            FirstName = firstname;
-            LastName = lastname;
-            PersonalNr = personalNr;
+        public Member() {
+            
         }
 
         public string FirstName { 

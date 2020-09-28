@@ -112,5 +112,7 @@ namespace assignment2 {
             Console.WriteLine("Show member by entering ID or show members by listing.");
         }
 
+        // Nu kanske?
+
     }
 }

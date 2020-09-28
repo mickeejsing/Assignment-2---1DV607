@@ -5,8 +5,8 @@ namespace assignment2 {
 
         private Member memberModel;
 
-        public MemberView(Member memberModel) {
-            this.memberModel = memberModel;
+        public MemberView() {
+
         }
     }
 }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\micke\\school\\1dv607\\assignment2\\assignment2.csproj": {}
+    "C:\\Programmering\\c#\\Assignment-2---1DV607\\assignment2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\micke\\school\\1dv607\\assignment2\\assignment2.csproj": {
+    "C:\\Programmering\\c#\\Assignment-2---1DV607\\assignment2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\micke\\school\\1dv607\\assignment2\\assignment2.csproj",
+        "projectUniqueName": "C:\\Programmering\\c#\\Assignment-2---1DV607\\assignment2.csproj",
         "projectName": "assignment2",
-        "projectPath": "C:\\Users\\micke\\school\\1dv607\\assignment2\\assignment2.csproj",
-        "packagesPath": "C:\\Users\\micke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\micke\\school\\1dv607\\assignment2\\obj\\",
+        "projectPath": "C:\\Programmering\\c#\\Assignment-2---1DV607\\assignment2.csproj",
+        "packagesPath": "C:\\Users\\Christoffer\\.nuget\\packages\\",
+        "outputPath": "C:\\Programmering\\c#\\Assignment-2---1DV607\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\micke\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Christoffer\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -35,6 +35,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -50,7 +56,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -15,7 +15,7 @@ namespace assignment2 {
         }
 
         public void mainMenu () {
-            this.registerView.getMainMenu();
+            this.registerView.displayMainNav();
         }
 
     }

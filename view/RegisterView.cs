@@ -1,170 +1,227 @@
 using System;
+using enums;
 using view;
 
-namespace assignment2 {
-    public class RegisterView : View  {
+namespace assignment2
+{
+    public class RegisterView : View
+    {
 
 
-        public void displayLogin() {
+        public void displayLogin()
+        {
             Console.WriteLine("Login screen");
             Console.WriteLine("Member [1]");
             Console.WriteLine("Secretary [2]");
         }
-
-        public void getSecretaryOptions() 
+        public void displaySecretaryOptions()
         {
-            Console.WriteLine("...");
+            Console.WriteLine("Manage boats [mb]");
+            Console.WriteLine("Manage members [mm]");
         }
 
-        public void displaySecretaryOptions() 
+        public void displayMemberNotFound()
         {
-            Console.WriteLine("Manage boats [1]");
-            Console.WriteLine("Manage members [2]");
+            Console.WriteLine("Sorry, the member was not found");
         }
 
-
-
-        // Scenario skapa användare
-        public void displaySecretaryMemberOptions() 
+        public string getBoatType()
         {
-            Console.WriteLine("Create member [1] Show members [2] Delete member [3] Change member information [4]");
-            int input = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("What type of boat do you have?");
+            Console.WriteLine("Only the boats bellow are valid");
+            string boatType;
 
-            if(!isInputOptionValid(input, 1, 4)) {
+            Boolean valid = false;
 
-                Console.WriteLine("The entered value is invalid.");
-                this.displaySecretaryMemberOptions();
+            var types = Enum.GetValues(typeof(Type));
 
-            } else {
-                this.routeMemberNav(input);
+            foreach (var type in types)
+            {
+                Console.WriteLine(type.ToString());
             }
+
+            // Get input
+
+            do
+            {
+                boatType = Console.ReadLine();
+
+                if (Type.Canoe.ToString().ToLower() == boatType.ToLower())
+                {
+                    return Type.Canoe.ToString();
+                }
+                else if (Type.Kayak.ToString().ToLower() == boatType.ToLower())
+                {
+                    return Type.Kayak.ToString();
+                }
+                else if (Type.Motorsailer.ToString().ToLower() == boatType.ToLower())
+                {   return Type.Motorsailer.ToString();
+
+                }
+                else if (Type.Other.ToString().ToLower() == boatType.ToLower())
+                {
+                    return Type.Other.ToString();
+                }
+                else if (Type.Sailboat.ToString().ToLower() == boatType.ToLower())
+                {
+                    return Type.Sailboat.ToString();
+                }
+            } while (!valid);
+            return Type.Other.ToString();
+        }
+
+        public void displayErrorNoBoatFound() {
+            Console.WriteLine("Sorry, no boats were found...");
+        }
+
+        public string getValidBoats(Member member) {
+            bool isValid = false;
+            string boatType;
+
+            if(member.boats.Count != 0) {
+            Console.Write("Remove one of the following boats: ");
+            foreach(Boat boat in member.boats) {
+                Console.Write(boat.Type + ",");
+            }
+            Console.Write(" or press q to quit");
+            Console.WriteLine();
+
+            do {
+                boatType = Console.ReadLine();
+                foreach(Boat boat in member.boats) {
+                    if (boatType.ToLower() == boat.Type.ToLower()) {
+                        isValid = true;
+                    }
+                }
+                if(boatType.ToLower() == "q") {
+                    isValid = true;
+                }
+            } while(!isValid);
+            return boatType;
+            }
+            else {
+                return "error";
+            }
+        }
+    
+
+        public double getBoatLength()
+        {
+            Console.WriteLine("How long is the boat?");
+            double boatLength = 0;
+            Boolean valid = false;
+
+
+            try
+            {
+                boatLength = Convert.ToDouble(Console.ReadLine());
+
+            }
+            catch (Exception ex)
+            {
+                while (!valid)
+                {
+                    Console.WriteLine("Exception message: " + ex.Message);
+                    Console.WriteLine("How long is the boat?");
+                    boatLength = Convert.ToDouble(Console.ReadLine());
+                    valid = true;
+                }
+            }
+            return boatLength;
+        }
+
+        public void displaySelectedMemberOptions()
+        {
+            Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb]");
+        }
+
+        public void displaySecretaryManagaeMemberBoats() {
+            Console.WriteLine("Add boat [amb] Delete boat [dmb] Edit [emb]");
+        }
+
+
+
+        public void displaySecretaryMemberOptions()
+        {
+            Console.WriteLine("Create member [cm] Show members [sm] Select member [selm]");
         }
 
         // Skapa medlem
-        public Member displayMemberForm() {
-            
-            string firstName;
-            string lastName;
-            int socialSecurityNumber;
 
-            
-            Console.Write("Type The members first name: ");
-            firstName = Console.ReadLine();
-            Console.Write("Type The members last name: ");
-            lastName = Console.ReadLine();
+
+        public int getSocialSecurityNumber()
+        {
             Console.Write("Type The members social security number: ");
-            socialSecurityNumber = Convert.ToInt32(Console.ReadLine());
-
-            Member member = new Member(firstName, lastName, socialSecurityNumber);
-            
-            return member;
-
+            int socialSecurityNumber = Convert.ToInt32(Console.ReadLine());
+            return socialSecurityNumber;
+        }
+        public string getFirstName()
+        {
+            Console.Write("Type The members first name: ");
+            string firstName = Console.ReadLine();
+            return firstName;
         }
 
-            /*
-            public void displaySecretaryOptions() {
-            Console.WriteLine("Create member [1] Show members [2] Delete member [3] Change member information [4]");
-            int input = Convert.ToInt32(Console.ReadLine());
-
-            if(!_registerModel.isInputOptionValid(input, 1, 4)) {
-
-                Console.WriteLine("The entered value is invalid.");
-                this.displayMemberOptions();
-
-            } else {
-                this.routeMemberNav(input);
-            }
-        }
-        */
-        
-        
-        /*
-        public void asass() {
-            Console.WriteLine("Boats [1] Members [2]");
-            int input = Convert.ToInt32(Console.ReadLine());
-
-            if(!_registerModel.isInputOptionValid(input, 1, 2)) {
-
-                Console.WriteLine("The entered value is invalid.");
-                this.displayLogin();
-
-            } else {
-                this.routeMainNav(input);
-            }
-        }
-        */
-
-/*
-        private void routeMainNav(int input) {
-            if (input == 1) {
-                this.displayBoatOptions();
-            } else if (input == 2) {
-                this.displayMemberOptions();
-            }
-        }
-*/
-        private void routeBoatNav(int input) {
-            if (input == 1) {
-                this.registerBoat();
-            } else if (input == 2) {
-                this.deleteBoat();
-            } else if (input == 3) {
-                this.changeBoat();
-            }
+        public string getLastName()
+        {
+            Console.Write("Type The members last name: ");
+            string lastName = Console.ReadLine();
+            return lastName;
         }
 
-        private void routeMemberNav(int input) {
-            if (input == 1) {
-                this.createMember();
-            } else if (input == 2) {
-                this.showMember();
-            } else if (input == 3) {
-                this.deleteMember();
-            } else if (input == 4) {
-                this.changeMember();
-            }
+        public void displayGetMemberDisplayFormat()
+        {
+            Console.WriteLine("Show Members Verbose [smv] Show Members Compact [smc]");
         }
 
-        public void displayBoatOptions() {
+        public void displayBoatOptions()
+        {
             Console.WriteLine("Register boat [1] Delete boat [2] Change boat information [3]");
-            int input = Convert.ToInt32(Console.ReadLine());
+        }
 
-            if(isInputOptionValid(input, 1, 3)) {
-
-                Console.WriteLine("The entered value is invalid.");
-                this.displayBoatOptions();
-
-            } else {
-                this.routeBoatNav(input);
-            }
+        public void displayMembersVerbose(Member member)
+        {
+            Console.WriteLine(member.FirstName);
 
         }
 
-        public void registerBoat() {
+        public void displayMembersCompact(Member member)
+        {
+            Console.WriteLine(member.LastName);
+        }
+
+        public void registerBoat()
+        {
             Console.WriteLine("Register boat");
         }
 
-        public void deleteBoat() {
+        public void deleteBoat()
+        {
             Console.WriteLine("Delete boat");
         }
 
-        public void changeBoat() {
+        public void changeBoat()
+        {
             Console.WriteLine("Change boat information");
         }
 
-        public void createMember() {
+        public void createMember()
+        {
             Console.WriteLine("Create member");
         }
 
-        public void changeMember() {
+        public void changeMember()
+        {
             Console.WriteLine("Change member information");
         }
 
-        public void deleteMember() {
+        public void deleteMember()
+        {
             Console.WriteLine("Delete Member");
         }
 
-        public void showMember() {
+        public void showMember()
+        {
             Console.WriteLine("Show member by entering ID or show members by listing.");
         }
 

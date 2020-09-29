@@ -27,6 +27,14 @@ namespace assignment2 {
             return false;
         }
 
+        public void updateFile() {
+
+            StreamWriter sw = new StreamWriter(dataPath);
+            sw.Write(JsonConvert.SerializeObject(_members));
+            sw.Close();
+
+        }
+
 
 
         public List<Member> getMembersFromJson() {
@@ -61,6 +69,8 @@ namespace assignment2 {
             StreamWriter sw = new StreamWriter(dataPath);
             sw.Write(JsonConvert.SerializeObject(jsonArr));
             sw.Close();
+            
+            _members.Add(member);
         }
     }
 }

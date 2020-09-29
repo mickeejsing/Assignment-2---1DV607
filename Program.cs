@@ -6,12 +6,10 @@ namespace assignment2 {
             
             MemberView memberView = new MemberView();
             Register register = new Register();
-            BoatView boatView = new BoatView();
             RegisterView registerView = new RegisterView();
 
-            Controller controller = new Controller(registerView, memberView, boatView, register);
-            controller.mainMenu();
-
+            Controller controller = new Controller(registerView, memberView, register);
+            controller.mainNav();
         }
     }
 }

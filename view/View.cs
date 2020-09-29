@@ -2,36 +2,73 @@ using System;
 using enums;
 
 namespace view
-{   public abstract class View
+{
+    public abstract class View
     {
-        public Enum getViewOperation() {
+        public Enum getViewOperation()
+        {
 
-            int input = getInput();
-            Console.WriteLine(input);
+            string input = getInput();
 
-            switch (input) {
-                case (1):
-                    return ViewOperations.isSecretary;
-                case (2):
+            switch (input)
+            {
+                case ("1"):
                     return ViewOperations.isMember;
-                case (3):
-                    return ViewOperations.SecretaryMemberOptions;
+                case ("2"):
+                    return ViewOperations.isSecretary;
+                case ("s"):
+                    return ViewOperations.SecretaryOptions;
+                case ("b"):
+                    return ViewOperations.ShowMainNav;
+                case ("mm"):
+                    return ViewOperations.ManageMembers;
+                case ("mb"):
+                    return ViewOperations.ManageBoats;
+                case ("cm"):
+                    return ViewOperations.CreateMember;
+                case ("sm"):
+                    return ViewOperations.ShowMembers;
+                case ("dm"):
+                    return ViewOperations.DeleteMember;
+                case ("em"):
+                    return ViewOperations.EditMember;
+                case ("q"):
+                    return ViewOperations.Quit;
+                case ("smv"):
+                    return ViewOperations.ShowMembersVerbose;
+                case ("smc"):
+                    return ViewOperations.ShowMembersCompact;
+                case ("selm"):
+                    return ViewOperations.SelectMember;
+                case ("mmb"):
+                    return ViewOperations.ManageMemberBoats;
+                case ("amb"):
+                    return ViewOperations.AddMemberBoat;
+                case ("dmb"):
+                    return ViewOperations.DeleteMemberBoat;
+                case ("emb"):
+                    return ViewOperations.EditMemberBoat;
                 default:
                     break;
             }
-            return ViewOperations.quit;
+            return ViewOperations.Quit;
         }
-        public int getInput() {
-
-            int input = Convert.ToInt32(Console.ReadLine());
-            return input;
-        }
-
-        public bool isInputOptionValid(int input, int from, int to) {    
-            if(input >= from && input <= to) {
-                return true;
+        public string getInput()
+        {
+            try
+            {
+                string s = Console.ReadLine().ToLower();
+                while (s == "\r" || s == "\n")
+                {
+                    s = Console.ReadLine().ToLower();
+                }
+                return s;
             }
-            return false;
+            catch (Exception e)
+            {
+                Console.WriteLine("Ett stort fel inträffade :S :S " + e);
+                return "error";
+            }
         }
     }
 }

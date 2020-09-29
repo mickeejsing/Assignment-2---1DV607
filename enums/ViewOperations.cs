@@ -5,10 +5,20 @@ namespace enums
         isSecretary,
         isMember,
         SecretaryOptions,
-        SecretaryMemberOptions,
-        quit,
-        createMember
-
-        
+        ManageMembers,
+        ManageBoats,
+        Quit,
+        CreateMember,
+        ShowMainNav,
+        ShowMembers,
+        DeleteMember,
+        EditMember,
+        ShowMembersVerbose,
+        ShowMembersCompact,
+        SelectMember,
+        ManageMemberBoats,
+        AddMemberBoat,
+        DeleteMemberBoat,
+        EditMemberBoat,
     }
 }

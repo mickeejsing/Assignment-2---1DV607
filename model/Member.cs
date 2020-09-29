@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace assignment2 {
     public class Member {
@@ -7,7 +8,9 @@ namespace assignment2 {
             FirstName = firstName;
             LastName = lastName;
             SocialSecurityNum = socialSecurityNum;
+            boats = new List<Boat>();
         }
+        public List<Boat> boats {get; set;}
 
         public string FirstName { 
             set; 
@@ -23,6 +26,7 @@ namespace assignment2 {
             private set; 
             get;
         }
+       
 
     }
 }

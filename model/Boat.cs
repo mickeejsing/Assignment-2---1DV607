@@ -3,16 +3,18 @@ using System;
 namespace assignment2 {
     public class Boat {
 
-        public Boat() {
+        public Boat(string type, double length) {
+            Type = type;
+            Length = length;
         }
 
-        public Type Type { 
-            private set; 
+        public string Type { 
+            set; 
             get; 
         }
 
         public double Length {
-            private set; 
+            set;
             get;
         }
 

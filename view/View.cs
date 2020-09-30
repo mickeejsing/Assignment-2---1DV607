@@ -48,6 +48,12 @@ namespace view
                     return ViewOperations.DeleteMemberBoat;
                 case ("emb"):
                     return ViewOperations.EditMemberBoat;
+                case ("ef"):
+                    return ViewOperations.EditFirstName;
+                case ("el"):
+                    return ViewOperations.EditLastName;
+                case ("md"):
+                    return ViewOperations.ShowMemberDetails;
                 default:
                     break;
             }

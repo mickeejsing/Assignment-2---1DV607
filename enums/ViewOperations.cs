@@ -20,5 +20,8 @@ namespace enums
         AddMemberBoat,
         DeleteMemberBoat,
         EditMemberBoat,
+        EditFirstName,
+        EditLastName,
+        ShowMemberDetails
     }
 }

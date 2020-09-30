@@ -6,8 +6,6 @@ namespace assignment2
 {
     public class RegisterView : View
     {
-
-
         public void displayLogin()
         {
             Console.WriteLine("Login screen");
@@ -27,7 +25,7 @@ namespace assignment2
 
         public string getBoatType()
         {
-            Console.WriteLine("What type of boat do you have?");
+            Console.WriteLine("What type of boat does the member have?");
             Console.WriteLine("Only the boats bellow are valid");
             string boatType;
 
@@ -37,73 +35,85 @@ namespace assignment2
 
             foreach (var type in types)
             {
-                Console.WriteLine(type.ToString());
+                Console.Write(type.ToString() + ", ");
             }
-
-            // Get input
-
+            Console.WriteLine();
             do
             {
+                Console.Write("Type in the boat: ");
                 boatType = Console.ReadLine();
 
-                if (Type.Canoe.ToString().ToLower() == boatType.ToLower())
+                foreach (var type in types)
                 {
-                    return Type.Canoe.ToString();
+                    if (boatType.ToLower() == type.ToString().ToLower()) {
+                        valid = true;
+                    }
                 }
-                else if (Type.Kayak.ToString().ToLower() == boatType.ToLower())
-                {
-                    return Type.Kayak.ToString();
-                }
-                else if (Type.Motorsailer.ToString().ToLower() == boatType.ToLower())
-                {   return Type.Motorsailer.ToString();
-
-                }
-                else if (Type.Other.ToString().ToLower() == boatType.ToLower())
-                {
-                    return Type.Other.ToString();
-                }
-                else if (Type.Sailboat.ToString().ToLower() == boatType.ToLower())
-                {
-                    return Type.Sailboat.ToString();
+                if (!valid) {
+                    Console.WriteLine(boatType + " was not found"); 
                 }
             } while (!valid);
-            return Type.Other.ToString();
+
+            return formatString(boatType);
         }
 
-        public void displayErrorNoBoatFound() {
+        private String formatString(string str) {
+            string returnString = "";
+            for(int i=0; i < str.Length; i++) {
+                
+                if(i == 0) {
+                   returnString+= str[i];
+                   returnString = returnString.ToUpper();
+                }
+                else {
+                    returnString+= str[i].ToString().ToLower();
+                }      
+            }
+            return returnString;
+        }
+        public void displayErrorNoBoatFound()
+        {
             Console.WriteLine("Sorry, no boats were found...");
         }
 
-        public string getValidBoats(Member member) {
+        public string getValidBoats(Member member)
+        {
             bool isValid = false;
             string boatType;
 
-            if(member.boats.Count != 0) {
-            Console.Write("Remove one of the following boats: ");
-            foreach(Boat boat in member.boats) {
-                Console.Write(boat.Type + ",");
-            }
-            Console.Write(" or press q to quit");
-            Console.WriteLine();
+            if (member.boats.Count != 0)
+            {
+                Console.Write("Remove one of the following boats: ");
+                foreach (Boat boat in member.boats)
+                {
+                    Console.WriteLine(boat.Type + ",");
+                }
+                Console.Write(" or press q to quit");
+                Console.WriteLine();
 
-            do {
-                boatType = Console.ReadLine();
-                foreach(Boat boat in member.boats) {
-                    if (boatType.ToLower() == boat.Type.ToLower()) {
+                do
+                {
+                    boatType = Console.ReadLine();
+                    foreach (Boat boat in member.boats)
+                    {
+                        if (boatType.ToLower() == boat.Type.ToLower())
+                        {
+                            isValid = true;
+                        }
+                    }
+                    if (boatType.ToLower() == "q")
+                    {
                         isValid = true;
                     }
-                }
-                if(boatType.ToLower() == "q") {
-                    isValid = true;
-                }
-            } while(!isValid);
-            return boatType;
+                } while (!isValid);
+                return boatType;
             }
-            else {
+            else
+            {
                 return "error";
             }
         }
-    
+
 
         public double getBoatLength()
         {
@@ -114,6 +124,7 @@ namespace assignment2
 
             try
             {
+                Console.WriteLine("The boat is: ");
                 boatLength = Convert.ToDouble(Console.ReadLine());
 
             }
@@ -132,10 +143,11 @@ namespace assignment2
 
         public void displaySelectedMemberOptions()
         {
-            Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb]");
+            Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb] Show member details [md]");
         }
 
-        public void displaySecretaryManagaeMemberBoats() {
+        public void displaySecretaryManagaeMemberBoats()
+        {
             Console.WriteLine("Add boat [amb] Delete boat [dmb] Edit [emb]");
         }
 
@@ -181,18 +193,22 @@ namespace assignment2
 
         public void displayMembersVerbose(Member member)
         {
-            Console.WriteLine(member.FirstName);
-
+            Console.WriteLine("===============MEMBER===============");
+            Console.WriteLine($"{member.FirstName} {member.LastName} {member.SocialSecurityNum} {member.Id}  ");
+            Console.WriteLine("===============BOATS================");
+            foreach(Boat boat in member.boats) {
+                Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
+            }
+            Console.WriteLine("====================================");
         }
 
         public void displayMembersCompact(Member member)
         {
-            Console.WriteLine(member.LastName);
+            Console.WriteLine($"{member.FirstName} {member.LastName} {member.Id} Boats: {member.boats.Count}");
         }
 
-        public void registerBoat()
-        {
-            Console.WriteLine("Register boat");
+        public void displayEditMemberOptions() {
+              Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back to secretary options [s] ");
         }
 
         public void deleteBoat()
@@ -205,24 +221,9 @@ namespace assignment2
             Console.WriteLine("Change boat information");
         }
 
-        public void createMember()
-        {
-            Console.WriteLine("Create member");
-        }
-
         public void changeMember()
         {
             Console.WriteLine("Change member information");
-        }
-
-        public void deleteMember()
-        {
-            Console.WriteLine("Delete Member");
-        }
-
-        public void showMember()
-        {
-            Console.WriteLine("Show member by entering ID or show members by listing.");
         }
 
         // Nu kanske? Ja

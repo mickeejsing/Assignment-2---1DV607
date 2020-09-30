@@ -19,7 +19,6 @@ namespace assignment2
             _register = register;
         }
 
-
         public void mainNav()
         {
             _registerView.displayLogin();
@@ -58,8 +57,7 @@ namespace assignment2
             if (input.Equals(ViewOperations.CreateMember))
             {
                 Member member = createMember();
-                Boat boat = createBoat();
-                member.boats.Add(boat);
+                createBoat(member);
                 _register.saveMemberToFile(member);
                 secretaryNav();
             }
@@ -87,6 +85,42 @@ namespace assignment2
 
                 }
 
+                if (input.Equals(ViewOperations.ShowMemberDetails))
+                {
+                    _registerView.displayMembersVerbose(member);
+                    secretaryNav();
+                }
+
+                while (input.Equals(ViewOperations.EditMember))
+                {
+                    _registerView.displayEditMemberOptions();
+                    input = _registerView.getViewOperation();
+
+                    if (input.Equals(ViewOperations.EditFirstName))
+                    {
+                        string firstName = _registerView.getFirstName();
+                        _register.UpdateMember(member, firstName, member.LastName);
+                        _register.getMembers().Remove(member);
+                        _register.updateFile();
+                        _register.saveMemberToFile(member);
+                        input = ViewOperations.EditMember;
+
+                    }
+
+                    else if (input.Equals(ViewOperations.EditLastName))
+                    {
+                        string lastName = _registerView.getLastName();
+                        _register.UpdateMember(member, member.FirstName, lastName);
+                        _register.getMembers().Remove(member);
+                        _register.updateFile();
+                        _register.saveMemberToFile(member);
+                        input = ViewOperations.EditMember;
+                    }
+                    else if (input.Equals(ViewOperations.SecretaryOptions))
+                    {
+                        secretaryNav();
+                    }
+                }
                 if (input.Equals(ViewOperations.ManageMemberBoats))
                 {
                     _registerView.displaySecretaryManagaeMemberBoats();
@@ -94,8 +128,7 @@ namespace assignment2
 
                     if (input.Equals(ViewOperations.AddMemberBoat))
                     {
-                        Boat boat = createBoat();
-                        member.boats.Add(boat);
+                        createBoat(member);
                         _register.updateFile();
                         secretaryNav();
                     }
@@ -140,27 +173,14 @@ namespace assignment2
 
                     }
                 }
-
-                if (input.Equals(ViewOperations.EditMember))
-                {
-
-                    member.LastName = "SuperTest";
-                    member.FirstName = "::DDD";
-                    _register.getMembers().Remove(member);
-                    _register.updateFile();
-                    _register.saveMemberToFile(member);
-                    secretaryNav();
-                }
-
             }
         }
 
-        public Boat createBoat()
+        public void createBoat(Member member)
         {
             string boatType = _registerView.getBoatType();
             double boatLength = _registerView.getBoatLength();
-            Boat boat = new Boat(boatType, boatLength);
-            return boat;
+            _register.CreateBoat(boatType, boatLength, member);
         }
 
         public Member createMember()
@@ -168,11 +188,11 @@ namespace assignment2
             string firstName = _registerView.getFirstName();
             string lastName = _registerView.getLastName();
             int socialSecurityNumber = _registerView.getSocialSecurityNumber();
-            Member member = new Member(firstName, lastName, socialSecurityNumber);
+            return _register.CreateMember(firstName, lastName, socialSecurityNumber);
 
-            return member;
         }
 
+        // kolla på sen
         public Member selectMember()
         {
             Member member;

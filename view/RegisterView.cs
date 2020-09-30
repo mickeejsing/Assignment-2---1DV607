@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using enums;
 using view;
 
@@ -16,6 +17,31 @@ namespace assignment2
         {
             Console.WriteLine("Manage boats [mb]");
             Console.WriteLine("Manage members [mm]");
+        }
+
+        public void displayAllBoats(List<Boat> boats) {
+            foreach(Boat boat in boats) {
+                Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
+
+            }
+        }
+
+        public void displaySecretarySingleBoatOptions() {
+            Console.WriteLine("Delete boat [db] Change type [cbt] Change length [cbl] Manage boats [mb]");
+        }
+        public string getSearchParam() {
+            Console.Write("Chose property to filter on: ");
+            string param = Console.ReadLine();
+            return param;
+        }
+
+        public string getSearchValue() {
+            Console.Write("Chose the value you want to look for: ");
+            string value = Console.ReadLine();
+            return value;
+        }
+        public void displaySingleBoat(Boat boat){
+            Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
         }
 
         public void displayMemberNotFound()
@@ -121,29 +147,29 @@ namespace assignment2
             double boatLength = 0;
             Boolean valid = false;
 
-
+            while (!valid) {
             try
             {
-                Console.WriteLine("The boat is: ");
+                Console.Write("The length of the boat is: : ");
                 boatLength = Convert.ToDouble(Console.ReadLine());
+                valid = true;
 
             }
             catch (Exception ex)
             {
-                while (!valid)
-                {
                     Console.WriteLine("Exception message: " + ex.Message);
-                    Console.WriteLine("How long is the boat?");
-                    boatLength = Convert.ToDouble(Console.ReadLine());
-                    valid = true;
-                }
             }
+            }
+
             return boatLength;
         }
 
         public void displaySelectedMemberOptions()
         {
-            Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb] Show member details [md]");
+            Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb] Show member details [md] Back to Secretary Options [s]");
+        }
+        public void displaySecretaryBoatOptions() {
+            Console.WriteLine("Show all boats [sab] Show boat from id [sbi] Edit boat [eb]");
         }
 
         public void displaySecretaryManagaeMemberBoats()
@@ -163,8 +189,19 @@ namespace assignment2
 
         public int getSocialSecurityNumber()
         {
-            Console.Write("Type The members social security number: ");
-            int socialSecurityNumber = Convert.ToInt32(Console.ReadLine());
+            bool isValid = false;
+            int socialSecurityNumber = 0;
+            
+            while(!isValid) {
+                try {
+                    Console.Write("Type The members social security number: ");
+                     socialSecurityNumber= Convert.ToInt32(Console.ReadLine());
+                     isValid = true;
+                }
+                catch(Exception ex) {
+                    Console.WriteLine("Please only write numbers...");
+                }
+            }
             return socialSecurityNumber;
         }
         public string getFirstName()
@@ -196,7 +233,16 @@ namespace assignment2
             Console.WriteLine("===============MEMBER===============");
             Console.WriteLine($"{member.FirstName} {member.LastName} {member.SocialSecurityNum} {member.Id}  ");
             Console.WriteLine("===============BOATS================");
-            foreach(Boat boat in member.boats) {
+            displayMemberBoatInfo(member);
+        }
+        public string getBoatId() {
+            Console.Write("Input id to delete: ");
+            string id = Console.ReadLine();
+            return id;
+        }
+
+        public void displayMemberBoatInfo(Member member) {
+                        foreach(Boat boat in member.boats) {
                 Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
             }
             Console.WriteLine("====================================");

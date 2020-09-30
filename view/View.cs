@@ -54,6 +54,18 @@ namespace view
                     return ViewOperations.EditLastName;
                 case ("md"):
                     return ViewOperations.ShowMemberDetails;
+                case ("eb"):
+                    return ViewOperations.EditBoat;
+                case ("sab"):
+                    return ViewOperations.ShowAllBoats;
+                case ("sbi"):
+                    return ViewOperations.ShowBoatFromId;
+                case ("db"):
+                    return ViewOperations.DeleteBoat;
+                case ("cbt"):
+                    return ViewOperations.EditBoatType;
+                case ("cbl"):
+                    return ViewOperations.editBoatLength;
                 default:
                     break;
             }

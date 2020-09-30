@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 namespace assignment2 {
     public class Register {
 
-        private List<Boat> _boats = new List<Boat>();
-        private List<Member> _members = new List<Member>();
+        private List<Boat> _boats;
+        private List<Member> _members;
         protected string dataPath = "Data/MemberData.json";
 
         public Register() {
@@ -15,7 +15,7 @@ namespace assignment2 {
             _boats = GetBoats();
         }
 
-        public List<Boat> GetBoats() {
+        private List<Boat> GetBoats() {
 
             List<Boat> boats = new List<Boat>();
             foreach(Member member in _members)
@@ -26,6 +26,22 @@ namespace assignment2 {
                 }
             }
             return boats;
+        }
+
+        public Boat searchBoat(string param, string value) {
+                if (param == "Length") {
+                   return _boats.Find(x => x.Length == Convert.ToDouble(value));
+                }          
+                else if(param == "Type") {
+                    return _boats.Find(x => x.Type == value);
+                }
+                else  {
+                    return _boats.Find(x => x.Id == Convert.ToInt32(value));
+                }
+            }
+
+        public List<Boat> getBoatsFromRegistery() {
+            return _boats;
         }
 
         public int totalBoats() {
@@ -54,6 +70,26 @@ namespace assignment2 {
             member.FirstName = firstName;
             member.LastName = lastName;
             return member;
+        }
+        public void DeleteBoat(Boat boat) {     
+            Console.WriteLine($"Båt med Id: {boat.Id} innuti Delete funktion");
+            foreach(Member member in _members)
+            {
+                foreach(Boat boatInList in member.boats)
+                {
+                    if(boatInList == boat)
+                    member.boats.Remove(boat);
+                    _boats.Remove(boat);
+                    updateFile();
+                    break;
+                }
+            }
+        }
+
+        public Boat UpdateBoat(Boat boat, string type, double length) {
+            boat.Type = type;
+            boat.Length = length;
+            return boat;
         }
 
             public void CreateBoat(string boatType,double length, Member member) {

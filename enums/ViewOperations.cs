@@ -22,6 +22,14 @@ namespace enums
         EditMemberBoat,
         EditFirstName,
         EditLastName,
-        ShowMemberDetails
+        ShowMemberDetails,
+        ShowAllBoats,
+        ShowBoatFromId,
+        EditBoat,
+        EditBoatOptions,
+        DeleteBoat,
+        EditBoatType,
+        editBoatLength
+
     }
 }

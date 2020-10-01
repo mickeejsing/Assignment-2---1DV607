@@ -24,6 +24,7 @@ namespace Factories
                 FirstName = firstName,
                 LastName = lastName,
                 SocialSecurityNum = socialSecurityNumber,
+                Id = id,
                 boats = new List<Boat>()
             };
             return member;

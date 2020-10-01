@@ -37,13 +37,23 @@ namespace Persistence
         {
             List<Member> memberList = new List<Member>();
 
-            using (StreamReader reader = new StreamReader(dataPath))
-            {
 
+            try
+            {
+                StreamReader reader = new StreamReader(dataPath);
                 memberList = JsonConvert.DeserializeObject<List<Member>>(reader.ReadToEnd());
+                return memberList;
             }
-            return memberList;
-        }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Couldnt find data file, creating a new one");
+                using (FileStream fs = File.Create(dataPath));
+                   StreamWriter sw = new StreamWriter(dataPath);
+                   sw.Write("[]");
+                   sw.Close();
+                }
+                return new List<Member>();
+            }
 
         public List<Boat> Boats()
         {

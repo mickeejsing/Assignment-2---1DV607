@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using enums;
-using View;
 using Model;
 namespace View
 {
@@ -19,52 +16,10 @@ namespace View
             Console.WriteLine("Manage members [mm]");
         }
 
-
-        public void displayMemberNotFound()
+        public void displayEditMemberOptions()
         {
-            Console.WriteLine("Sorry, the member was not found");
+            Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back to secretary options [s] ");
         }
-
-
-        public string getValidBoats(Member member)
-        {
-            bool isValid = false;
-            string boatType;
-
-            if (member.boats.Count != 0)
-            {
-                Console.Write("Remove one of the following boats: ");
-                foreach (Boat boat in member.boats)
-                {
-                    Console.WriteLine(boat.Type + ",");
-                }
-                Console.Write(" or press q to quit");
-                Console.WriteLine();
-
-                do
-                {
-                    boatType = Console.ReadLine();
-                    foreach (Boat boat in member.boats)
-                    {
-                        if (boatType.ToLower() == boat.Type.ToLower())
-                        {
-                            isValid = true;
-                        }
-                    }
-                    if (boatType.ToLower() == "q")
-                    {
-                        isValid = true;
-                    }
-                } while (!isValid);
-                return boatType;
-            }
-            else
-            {
-                return "error";
-            }
-        }
-
-
 
         public void displaySelectedMemberOptions()
         {
@@ -76,29 +31,26 @@ namespace View
             Console.WriteLine("Add boat [amb] Delete boat [dmb] Edit [emb]");
         }
 
-
-
         public void displaySecretaryMemberOptions()
         {
             Console.WriteLine("Create member [cm] Show members [sm] Select member [selm]");
         }
-
-        // Skapa medlem
-
-
         public int getSocialSecurityNumber()
         {
             bool isValid = false;
             int socialSecurityNumber = 0;
-            
-            while(!isValid) {
-                try {
+
+            while (!isValid)
+            {
+                try
+                {
                     Console.Write("Type The members social security number: ");
-                     socialSecurityNumber= Convert.ToInt32(Console.ReadLine());
-                     isValid = true;
+                    socialSecurityNumber = Convert.ToInt32(Console.ReadLine());
+                    isValid = true;
                 }
-                catch(Exception ex) {
-                    Console.WriteLine("Please only write numbers...");
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Please only write numbers..." + " " +ex);
                 }
             }
             return socialSecurityNumber;
@@ -134,14 +86,11 @@ namespace View
             Console.WriteLine("===============BOATS================");
             displayMemberBoatInfo(member);
         }
-        public string getBoatId() {
-            Console.Write("Input id to delete: ");
-            string id = Console.ReadLine();
-            return id;
-        }
 
-        public void displayMemberBoatInfo(Member member) {
-                        foreach(Boat boat in member.boats) {
+        public void displayMemberBoatInfo(Member member)
+        {
+            foreach (Boat boat in member.boats)
+            {
                 Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
             }
             Console.WriteLine("====================================");
@@ -151,10 +100,5 @@ namespace View
         {
             Console.WriteLine($"{member.FirstName} {member.LastName} {member.Id} Boats: {member.boats.Count}");
         }
-
-        public void displayEditMemberOptions() {
-              Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back to secretary options [s] ");
-        }
-
     }
 }

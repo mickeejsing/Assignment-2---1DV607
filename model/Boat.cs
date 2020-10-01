@@ -20,6 +20,5 @@ namespace Model
             set;
             get;
         }
-
     }
 }

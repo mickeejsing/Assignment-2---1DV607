@@ -1,4 +1,4 @@
-namespace enums
+namespace Enums
 {
     public enum ViewOperations
     {

@@ -10,8 +10,8 @@ namespace Persistence
     public class JsonContext : IDbContext
     {
 
-        public List<Boat> boats;
-        public List<Member> members;
+        private List<Boat> boats;
+        private List<Member> members;
         protected string dataPath = "Data/MemberData.json";
 
         public JsonContext()

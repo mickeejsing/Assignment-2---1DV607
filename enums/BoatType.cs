@@ -1,7 +1,6 @@
-using System;
 
-namespace assignment2 {
-    public enum Type {
+namespace Enums {
+    public enum BoatType {
         Sailboat, 
         Motorsailer, 
         Kayak,

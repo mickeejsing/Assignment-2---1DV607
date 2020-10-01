@@ -13,10 +13,10 @@ namespace Factories
             return new JsonContext();
         }
 
-        public static MockContext mockContext() {
+        public MockContext mockContext() {
             return new MockContext();
         }
-        public static Member CreateMember(string firstName, string lastName, int socialSecurityNumber)
+        public Member CreateMember(string firstName, string lastName, int socialSecurityNumber)
         {
             Random rnd = new Random();
             int id = rnd.Next(10000,99999);
@@ -28,7 +28,7 @@ namespace Factories
             };
             return member;
         }
-        public static Boat CreateBoat(string boatType, double length)
+        public Boat CreateBoat(string boatType, double length)
         {
             Random rnd = new Random();
             int id = rnd.Next(10000,99999);
@@ -40,18 +40,18 @@ namespace Factories
             };
             return boat;
         }
-        public static MemberView CreateMemberView() {
+        public MemberView CreateMemberView() {
             return new MemberView();
         }
-        public static BoatView CreateBoatView() {
+        public BoatView CreateBoatView() {
             return new BoatView();
         }
 
-        public static MemberController CreateMemberController() {
-            return new MemberController(CreateMemberView(), CreateContext());
+        public MemberController CreateMemberController(Factory factory) {
+            return new MemberController(CreateMemberView(), CreateContext(), factory);
         }
 
-        public static BoatController CreateBoatController() {
+        public BoatController CreateBoatController() {
            return new BoatController(CreateBoatView(),CreateContext());
         }
     }

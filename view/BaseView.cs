@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Model;
-using enums;
+using Enums;
 
 namespace View
 {
@@ -164,6 +164,47 @@ namespace View
             return boatLength;
         }
 
+        public void displayMemberNotFound()
+        {
+            Console.WriteLine("Sorry, the member was not found");
+        }
+        public string getValidBoats(Member member)
+        {
+            bool isValid = false;
+            string boatType;
+
+            if (member.boats.Count != 0)
+            {
+                Console.Write("Remove one of the following boats: ");
+                foreach (Boat boat in member.boats)
+                {
+                    Console.WriteLine(boat.Type + ",");
+                }
+                Console.Write(" or press q to quit");
+                Console.WriteLine();
+
+                do
+                {
+                    boatType = Console.ReadLine();
+                    foreach (Boat boat in member.boats)
+                    {
+                        if (boatType.ToLower() == boat.Type.ToLower())
+                        {
+                            isValid = true;
+                        }
+                    }
+                    if (boatType.ToLower() == "q")
+                    {
+                        isValid = true;
+                    }
+                } while (!isValid);
+                return boatType;
+            }
+            else
+            {
+                return "error";
+            }
+        }
         public string getBoatType()
         {
             Console.WriteLine("What type of boat does the member have?");
@@ -171,8 +212,7 @@ namespace View
             string boatType;
 
             Boolean valid = false;
-
-            var types = Enum.GetValues(typeof(Type));
+            var types = Enum.GetValues(typeof(BoatType));
 
             foreach (var type in types)
             {
@@ -198,6 +238,12 @@ namespace View
             } while (!valid);
 
             return formatString(boatType);
+        }
+        public string getBoatId()
+        {
+            Console.Write("Input id to delete: ");
+            string id = Console.ReadLine();
+            return id;
         }
     }
 

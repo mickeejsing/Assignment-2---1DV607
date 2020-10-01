@@ -6,7 +6,7 @@ namespace View
     {
         public void displaySecretarySingleBoatOptions()
         {
-            Console.WriteLine("Delete boat [db] Change type [cbt] Change length [cbl] Manage boats [mb]");
+            Console.WriteLine("Delete boat [db] Change type [cbt] Change length [cbl] Manage boats [mb] Back to Secretary Options [s]");
         }
 
         public void displaySecretaryBoatOptions()

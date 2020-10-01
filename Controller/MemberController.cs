@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using enums;
+using Enums;
 using Persistence;
 using View;
 using Model;
@@ -13,27 +12,40 @@ namespace Controller
     {
         private readonly MemberView _memberView;
         private readonly IDbContext _dbContext;
+        private readonly Factory _factory;
         private Enum input;
 
-        public MemberController(MemberView memberView, IDbContext dbContext)
+        public MemberController(MemberView memberView, IDbContext dbContext, Factory factory)
         {
             _memberView = memberView;
             _dbContext = dbContext;
+            _factory = factory;
         }
 
         public void mainNav()
         {
-            _memberView.displayLogin();
-            input = _memberView.getViewOperation();
-            switch (input)
+            do
             {
-                case ViewOperations.isSecretary:
-                    secretaryNav();
+                _memberView.displayLogin();
+                input = _memberView.getViewOperation();
+                switch (input)
+                {
+                    case ViewOperations.isSecretary:
+                        {
+                            secretaryNav();
+                            break;
+                        }
+                    case ViewOperations.isMember:
+                        {
+                            memberNav();
+                            break;
+                        }
+                }
+                if (input.Equals(ViewOperations.Quit))
+                {
                     break;
-                case ViewOperations.isMember:
-                    memberNav();
-                    break;
-            }
+                }
+            } while (true);
         }
         public void secretaryNav()
         {
@@ -46,7 +58,7 @@ namespace Controller
                 }
                 else if (input.Equals(ViewOperations.ManageBoats))
                 {
-                    Factory.CreateBoatController().secretaryBoatHandler();
+                    _factory.CreateBoatController().secretaryBoatHandler();
                 }
             }
         }
@@ -62,7 +74,10 @@ namespace Controller
                 string firstName = _memberView.getFirstName();
                 string lastName = _memberView.getLastName();
                 int socialSecurityNumber = _memberView.getSocialSecurityNumber();
-                Member member = Factory.CreateMember(firstName, lastName, socialSecurityNumber);
+                Member member = _factory.CreateMember(firstName, lastName, socialSecurityNumber);
+                Boat boat = HandleCreateBoat();
+                member.boats.Add(boat);
+                _dbContext.SaveChanges();
                 _dbContext.Members().Add(member);
                 _dbContext.SaveChanges();
                 secretaryNav();
@@ -113,9 +128,7 @@ namespace Controller
 
                     if (input.Equals(ViewOperations.AddMemberBoat))
                     {
-                        string boatType = _memberView.getBoatType();
-                        double boatLength = _memberView.getBoatLength();
-                        Boat boat = Factory.CreateBoat(boatType,boatLength);
+                        Boat boat = HandleCreateBoat();
                         _dbContext.Members().Find(m => m == member).boats.Add(boat);
                         _dbContext.SaveChanges();
                         secretaryNav();
@@ -133,8 +146,6 @@ namespace Controller
 
                     if (input.Equals(ViewOperations.EditMemberBoat))
                     {
-                        //välj båt
-                        // här behövs det göras mer
                         Boat boat = member.boats.Where(b => b.Type == "sailboat").FirstOrDefault();
                         double boatLenth = _memberView.getBoatLength();
                         string boatType = _memberView.getBoatType();
@@ -187,6 +198,13 @@ namespace Controller
             _memberView.displayAllBoats(_dbContext.Boats());
         }
 
+        public Boat HandleCreateBoat()
+        {
+            string boatType = _memberView.getBoatType();
+            double boatLength = _memberView.getBoatLength();
+            Boat boat = _factory.CreateBoat(boatType, boatLength);
+            return boat;
+        }
         public Boat searchBoat(bool detailed = true)
         {
             if (detailed)

@@ -7,7 +7,8 @@ namespace assignment2
     {
         static void Main(string[] args)
         {
-            Factory.CreateMemberController().mainNav();
+            Factory factory = new Factory();
+            factory.CreateMemberController(factory).mainNav();
         }
     }
 }

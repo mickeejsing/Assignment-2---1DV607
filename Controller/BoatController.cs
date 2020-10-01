@@ -1,5 +1,5 @@
 using System;
-using enums;
+using Enums;
 using Model;
 using Persistence;
 using View;
@@ -20,42 +20,67 @@ namespace Controller
         public void secretaryBoatHandler()
         {
 
+            bool stayInSecretaryMenu = true;
             _boatView.displaySecretaryBoatOptions();
             input = _boatView.getViewOperation();
+            if(stayInSecretaryMenu)
+            switch (input)
+            {
+                case ViewOperations.ShowAllBoats:
+                    {
+                        ShowAllBoats();
+                        secretaryBoatHandler();
+                        break;
+                    }
+                case ViewOperations.ShowBoatFromId:
+                    {
+                        bool detailedSearch = false;
+                        Boat boat = searchBoat(detailedSearch);
+                        if (boat != null)
+                        {
+                            _boatView.displaySingleBoat(boat);
+                        }
+                        _boatView.displayErrorNoBoatFound();
+                        break;
+                    }
+                case ViewOperations.EditBoat:
+                    {
+                        Boat boat = searchBoat();
+                        if (boat != null)
+                        {
+                            handleEditBoat(boat);
+                        }
+                        else
+                        {
+                            _boatView.displayErrorNoBoatFound();
+                        }
 
-            if (input.Equals(ViewOperations.ShowAllBoats))
-            {
-                ShowAllBoats();
-                secretaryBoatHandler();
-            }
-            else if (input.Equals(ViewOperations.ShowBoatFromId))
-            {
-
-                _boatView.displaySingleBoat(searchBoat());
-                secretaryBoatHandler();
-            }
-            else if (input.Equals(ViewOperations.EditBoat))
-            {
-                Boat boat = searchBoat();
-                if (boat != null)
+                        break;
+                    }
+                case ViewOperations.SecretaryOptions:
                 {
-                    handleEditBoat(boat);
+                    stayInSecretaryMenu=false;
+                    break;
                 }
-                else
+                default:
                 {
-                    _boatView.displayErrorNoBoatFound();
+                    secretaryBoatHandler();
+                    break;
                 }
-                secretaryBoatHandler();
-            }
-            else
-            {
-                secretaryBoatHandler();
             }
         }
         public void ShowAllBoats()
         {
-            _boatView.displayAllBoats(_dbContext.Boats());
+            if (_dbContext.Boats().Count != 0)
+            {
+                _boatView.displayAllBoats(_dbContext.Boats());
+            }
+            else
+            {
+                _boatView.displayErrorNoBoatFound();
+            }
         }
+
 
         public Boat searchBoat(bool detailed = true)
         {
@@ -85,7 +110,6 @@ namespace Controller
                 string value = _boatView.getSearchValue();
                 return _dbContext.Boats().Find(b => b.Id == Convert.ToInt32(value));
             }
-            _boatView.displayErrorNoBoatFound();
             return null;
         }
         public void handleEditBoat(Boat boat)
@@ -112,7 +136,7 @@ namespace Controller
                 else if (input.Equals(ViewOperations.editBoatLength))
                 {
                     // Hämta längd
-                    double boatLength =_boatView.getBoatLength();
+                    double boatLength = _boatView.getBoatLength();
                     foreach (Member memberInContext in _dbContext.Members())
                     {
                         if (memberInContext.boats.Contains(boat))
@@ -126,7 +150,7 @@ namespace Controller
                 }
                 else if (input.Equals(ViewOperations.EditBoatType))
                 {
-                    String boatType =_boatView.getBoatType();
+                    String boatType = _boatView.getBoatType();
                     foreach (Member memberInContext in _dbContext.Members())
                     {
                         if (memberInContext.boats.Contains(boat))

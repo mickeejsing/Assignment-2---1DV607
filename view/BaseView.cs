@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Model;
-using Enums;
 
 namespace View
 {
     public abstract class BaseView
     {
-        public Enum getViewOperation()
+        public Enum GetViewOperation()
         {
-
-            string input = getInput();
+            string input = GetInput();
 
             switch (input)
             {
@@ -67,13 +65,21 @@ namespace View
                 case ("cbt"):
                     return ViewOperations.EditBoatType;
                 case ("cbl"):
-                    return ViewOperations.editBoatLength;
+                    return ViewOperations.EditBoatLength;
                 default:
                     break;
             }
             return ViewOperations.Quit;
         }
-        public string getInput()
+        public void DisplayMemberBoatInfo(Member member)
+        {
+            foreach (Boat boat in member.Boats)
+            {
+                Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
+            }
+            Console.WriteLine("====================================");
+        }
+        public string GetInput()
         {
             try
             {
@@ -86,37 +92,42 @@ namespace View
             }
             catch (Exception e)
             {
-                Console.WriteLine("Something went wrong: " + e);
+                Console.WriteLine("Could not get input: " + e);
                 return "error";
             }
         }
-        public string getSearchValue()
+        public string GetSearchValue()
         {
             Console.Write("Chose the value you want to look for: ");
             string value = Console.ReadLine();
             return value;
         }
 
-        public void displayAllBoats(List<Boat> boats)
+        public string GetBoatTypeValue()
+        {
+            Console.Write("Chose which Boat Type to filter on");
+            string value = Console.ReadLine();
+            return value;
+        }
+        public void DisplayAllBoats(List<Boat> boats)
         {
             foreach (Boat boat in boats)
             {
-                Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
-
+                Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
             }
         }
-        public string getSearchParam()
+        public string GetSearchParam()
         {
             Console.Write("Chose property to filter on: ");
             string param = Console.ReadLine();
             return param;
         }
 
-        public void displaySingleBoat(Boat boat)
+        public void DisplaySingleBoat(Boat boat)
         {
-            Console.WriteLine($"{boat.Type} {boat.Length} {boat.Id}");
+            Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
         }
-        protected String formatString(string str)
+        protected String UppercaseFirstlLetter(string str)
         {
             string returnString = "";
             for (int i = 0; i < str.Length; i++)
@@ -135,14 +146,14 @@ namespace View
             return returnString;
         }
 
-        public void displayErrorNoBoatFound()
+        public void DisplayErrorBoatNotFound()
         {
             Console.WriteLine("Sorry, no boats were found...");
         }
 
-        public double getBoatLength()
+        public double GetBoatLength()
         {
-            Console.WriteLine("How long is the boat?");
+            Console.WriteLine("How many meters long is the boat?");
             double boatLength = 0;
             Boolean valid = false;
 
@@ -150,7 +161,7 @@ namespace View
             {
                 try
                 {
-                    Console.Write("The length of the boat is: : ");
+                    Console.Write("The length of the boat is: ");
                     boatLength = Convert.ToDouble(Console.ReadLine());
                     valid = true;
 
@@ -164,21 +175,21 @@ namespace View
             return boatLength;
         }
 
-        public void displayMemberNotFound()
+        public void DisplayMemberNotFound()
         {
             Console.WriteLine("Sorry, the member was not found");
         }
-        public string getValidBoats(Member member)
+        public string GetValidBoats(Member member)
         {
             bool isValid = false;
             string boatType;
 
-            if (member.boats.Count != 0)
+            if (member.Boats.Count != 0)
             {
                 Console.Write("Remove one of the following boats: ");
-                foreach (Boat boat in member.boats)
+                foreach (Boat boat in member.Boats)
                 {
-                    Console.WriteLine(boat.Type + ",");
+                    Console.WriteLine(boat.BoatType + ",");
                 }
                 Console.Write(" or press q to quit");
                 Console.WriteLine();
@@ -186,9 +197,9 @@ namespace View
                 do
                 {
                     boatType = Console.ReadLine();
-                    foreach (Boat boat in member.boats)
+                    foreach (Boat boat in member.Boats)
                     {
-                        if (boatType.ToLower() == boat.Type.ToLower())
+                        if (boatType.ToLower() == boat.BoatType.ToString().ToLower())
                         {
                             isValid = true;
                         }
@@ -205,7 +216,7 @@ namespace View
                 return "error";
             }
         }
-        public string getBoatType()
+        public BoatType GetBoatType()
         {
             Console.WriteLine("What type of boat does the member have?");
             Console.WriteLine("Only the boats bellow are valid");
@@ -213,7 +224,6 @@ namespace View
 
             Boolean valid = false;
             var types = Enum.GetValues(typeof(BoatType));
-
             foreach (var type in types)
             {
                 Console.Write(type.ToString() + ", ");
@@ -221,7 +231,7 @@ namespace View
             Console.WriteLine();
             do
             {
-                Console.Write("Type in the boat: ");
+                Console.Write("Type in the Boat Type: ");
                 boatType = Console.ReadLine();
 
                 foreach (var type in types)
@@ -229,6 +239,7 @@ namespace View
                     if (boatType.ToLower() == type.ToString().ToLower())
                     {
                         valid = true;
+                        return (BoatType)type;
                     }
                 }
                 if (!valid)
@@ -236,16 +247,46 @@ namespace View
                     Console.WriteLine(boatType + " was not found");
                 }
             } while (!valid);
-
-            return formatString(boatType);
+            throw new Exception("Something went wrong");
         }
-        public string getBoatId()
+        public int GetBoatId()
         {
             Console.Write("Input id to delete: ");
-            string id = Console.ReadLine();
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            //TODO try-catch
             return id;
         }
     }
-
-
+    public enum ViewOperations
+    {
+        isSecretary,
+        isMember,
+        SecretaryOptions,
+        ManageMembers,
+        ManageBoats,
+        Quit,
+        CreateMember,
+        ShowMainNav,
+        ShowMembers,
+        DeleteMember,
+        EditMember,
+        ShowMembersVerbose,
+        ShowMembersCompact,
+        SelectMember,
+        ManageMemberBoats,
+        AddMemberBoat,
+        DeleteMemberBoat,
+        EditMemberBoat,
+        EditFirstName,
+        EditLastName,
+        ShowMemberDetails,
+        ShowAllBoats,
+        ShowBoatFromId,
+        EditBoat,
+        EditBoatOptions,
+        DeleteBoat,
+        EditBoatType,
+        EditBoatLength
+    }
 }

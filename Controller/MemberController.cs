@@ -1,274 +1,195 @@
 using System;
-using System.Linq;
-using Enums;
 using Persistence;
 using View;
 using Model;
-using Factories;
+using System.Collections.Generic;
 
 namespace Controller
 {
     public class MemberController
     {
         private readonly MemberView _memberView;
-        private readonly IDbContext _dbContext;
-        private readonly Factory _factory;
+        private readonly Repository _repository;
         private Enum input;
-
-        public MemberController(MemberView memberView, IDbContext dbContext, Factory factory)
+        public MemberController(MemberView memberView, Repository repository)
         {
             _memberView = memberView;
-            _dbContext = dbContext;
-            _factory = factory;
+            _repository = repository;
         }
 
-        public void mainNav()
+        
+
+        public Member HandleSelectMember()
         {
-            do
-            {
-                _memberView.displayLogin();
-                input = _memberView.getViewOperation();
-                switch (input)
-                {
-                    case ViewOperations.isSecretary:
-                        {
-                            secretaryNav();
-                            break;
-                        }
-                    case ViewOperations.isMember:
-                        {
-                            memberNav();
-                            break;
-                        }
-                }
-                if (input.Equals(ViewOperations.Quit))
-                {
-                    break;
-                }
-            } while (true);
-        }
-        public void secretaryNav()
-        {
-            _memberView.displaySecretaryOptions();
-            {
-                input = _memberView.getViewOperation();
-                if (input.Equals(ViewOperations.ManageMembers))
-                {
-                    secretaryMemberHandler();
-                }
-                else if (input.Equals(ViewOperations.ManageBoats))
-                {
-                    _factory.CreateBoatController().secretaryBoatHandler();
-                }
-            }
+            List<Member> members = _repository.GetAllMembers();
+
+            members.ForEach(m => _memberView.DisplayMembersCompact(m));
+            Member selectedMember = selectMember();
+
+            return selectedMember;
         }
 
-
-        public void secretaryMemberHandler()
+        public Enum DisplayLogin()
         {
-            _memberView.displaySecretaryMemberOptions();
-            input = _memberView.getViewOperation();
+            _memberView.DisplayLogin();
+            return _memberView.GetViewOperation();
+        }
 
-            if (input.Equals(ViewOperations.CreateMember))
+        public Enum DisplayMainOptions()
+        {
+            _memberView.DisplayMainOptions();
+            return _memberView.GetViewOperation();
+        }
+        public Enum DisplaySelectedMemberOptions()
+        {
+            _memberView.DisplaySelectedMemberOptions();
+            return _memberView.GetViewOperation();
+        }
+
+        public Enum DisplayEditMemberOptions()
+        {
+            _memberView.DisplayEditMemberOptions();
+            return _memberView.GetViewOperation();
+        }
+        public Enum DisplayMemberOptions()
+        {
+            DisplayMemberOptions();
+            return _memberView.GetViewOperation();
+        }
+
+        public void HandleRemoveMember(Member member)
+        {
+            _repository.RemoveMember(member);
+        }
+
+        public void HandleDisplayMembers()
+        {
+            _memberView.DisplayGetMemberDisplayFormat();
+            input = _memberView.GetViewOperation();
+            List<Member> members = _repository.GetAllMembers();
+
+            switch (input)
             {
-                string firstName = _memberView.getFirstName();
-                string lastName = _memberView.getLastName();
-                int socialSecurityNumber = _memberView.getSocialSecurityNumber();
-                Member member = _factory.CreateMember(firstName, lastName, socialSecurityNumber);
-                Boat boat = HandleCreateBoat();
-                member.boats.Add(boat);
-                _dbContext.SaveChanges();
-                _dbContext.Members().Add(member);
-                _dbContext.SaveChanges();
-                secretaryNav();
-            }
-
-            // Display members
-            if (input.Equals(ViewOperations.ShowMembers))
-            {
-                displayMembers();
-                secretaryNav();
-            }
-
-            // Select member
-            if (input.Equals(ViewOperations.SelectMember))
-            {
-                _dbContext.Members().ForEach(m => _memberView.displayMembersCompact(m));
-                Member member = selectMember();
-
-                _memberView.displaySelectedMemberOptions();
-                input = _memberView.getViewOperation();
-                if (input.Equals(ViewOperations.DeleteMember))
-                {
-                    _dbContext.Members().Remove(member);
-                    _dbContext.SaveChanges();
-                    secretaryNav();
-
-                }
-
-                if (input.Equals(ViewOperations.ShowMemberDetails))
-                {
-                    _memberView.displayMembersVerbose(member);
-                    secretaryNav();
-                }
-
-                if (input.Equals(ViewOperations.SecretaryOptions))
-                {
-                    secretaryNav();
-                }
-
-                while (input.Equals(ViewOperations.EditMember))
-                {
-                    handleEditMember(member);
-                }
-                if (input.Equals(ViewOperations.ManageMemberBoats))
-                {
-                    _memberView.displaySecretaryManagaeMemberBoats();
-                    input = _memberView.getViewOperation();
-
-                    if (input.Equals(ViewOperations.AddMemberBoat))
-                    {
-                        Boat boat = HandleCreateBoat();
-                        _dbContext.Members().Find(m => m == member).boats.Add(boat);
-                        _dbContext.SaveChanges();
-                        secretaryNav();
-                    }
-
-                    if (input.Equals(ViewOperations.DeleteMemberBoat))
-                    {
-                        bool detailedSearch = false;
-                        _memberView.displayMemberBoatInfo(member);
-                        Boat boat = searchBoat(detailedSearch);
-                        _dbContext.Members().Find(m => member == m).boats.Remove(boat);
-                        _dbContext.SaveChanges();
-                        secretaryNav();
-                    }
-
-                    if (input.Equals(ViewOperations.EditMemberBoat))
-                    {
-                        Boat boat = member.boats.Where(b => b.Type == "sailboat").FirstOrDefault();
-                        double boatLenth = _memberView.getBoatLength();
-                        string boatType = _memberView.getBoatType();
-                        member.boats.Remove(boat);
-                        _dbContext.Members().Remove(member);
-
-                        boat.Type = boatType;
-                        boat.Length = boatLenth;
-                        member.boats.Add(boat);
-
-                        _dbContext.Members().Add(member);
-                        secretaryNav();
-                        _dbContext.SaveChanges();
-
-                    }
-                }
+                case ViewOperations.ShowMembersVerbose:
+                    members.ForEach(m => _memberView.DisplayMembersVerbose(m)); break;
+                case ViewOperations.ShowMembersCompact:
+                    members.ForEach(m => _memberView.DisplayMembersCompact(m)); break;
+                default: HandleDisplayMembers(); break;
             }
         }
 
-
-        public void handleEditMember(Member member)
+        public void HandleEditMember(Member member)
         {
-            _memberView.displayEditMemberOptions();
-            input = _memberView.getViewOperation();
+            _memberView.DisplayEditMemberOptions();
+            input = _memberView.GetViewOperation();
 
-            if (input.Equals(ViewOperations.EditFirstName))
+            switch (input)
             {
-                string firstName = _memberView.getFirstName();
-                _dbContext.Members().Find(m => member == m).FirstName = firstName;
-                _dbContext.SaveChanges();
-                input = ViewOperations.EditMember;
+                case ViewOperations.EditFirstName:
+                    EditFirstName(member);
+                    HandleEditMember(member); break;
+                case ViewOperations.EditLastName:
+                    EditLastName(member);
+                    HandleEditMember(member); break;
+                default: HandleEditMember(member); break;
+            }
+        }
 
-            }
+        public void EditFirstName(Member member)
+        {
+            string firstName = _memberView.GetFirstName();
+            _repository.ChangeFirstName(member, firstName);
+            input = ViewOperations.EditMember;
+        }
 
-            else if (input.Equals(ViewOperations.EditLastName))
-            {
-                string lastName = _memberView.getLastName();
-                _dbContext.Members().Find(m => member == m).FirstName = lastName;
-                _dbContext.SaveChanges();
-                input = ViewOperations.EditMember;
-            }
-            else if (input.Equals(ViewOperations.SecretaryOptions))
-            {
-                secretaryNav();
-            }
+        public void EditLastName(Member member)
+        {
+            string lastName = _memberView.GetLastName();
+            _repository.ChangeLastName(member, lastName);
+            input = ViewOperations.EditMember;
         }
 
         public void ShowAllBoats()
         {
-            _memberView.displayAllBoats(_dbContext.Boats());
+            List<Boat> boats = _repository.GetAllBoats();
+            _memberView.DisplayAllBoats(boats);
         }
 
-        public Boat HandleCreateBoat()
+        public void HandleAddMember(Member member)
         {
-            string boatType = _memberView.getBoatType();
-            double boatLength = _memberView.getBoatLength();
-            Boat boat = _factory.CreateBoat(boatType, boatLength);
-            return boat;
+                member = HandleCreateMember();
         }
-        public Boat searchBoat(bool detailed = true)
-        {
-            if (detailed)
-            {
 
-                string param = _memberView.getSearchParam();
-                string value = _memberView.getSearchValue();
-                if (param == "Type")
+        public bool memberIdTaken(Member member)
+        {
+            List<Member> members = _repository.GetAllMembers();
+                            foreach (Member memberInCollection in members)
                 {
-                    Boat boat = _dbContext.Boats().Find(b => b.Type == value);
-                    return boat;
+                    if (member.Id == memberInCollection.Id)
+                    {
+                        return true;
+                    }
                 }
-                else if (param == "Length")
-                {
-                    Boat boat = _dbContext.Boats().Find(b => b.Length == Convert.ToDouble(value));
-                    return boat;
-                }
-                else if (param == "Id")
-                {
-                    Boat boat = _dbContext.Boats().Find(b => b.Id == Convert.ToInt32(value));
-                    return boat;
-                }
-            }
-            else
+                return false;
+        }
+
+        public Member HandleCreateMember()
+        {
+            string firstName = _memberView.GetFirstName();
+            string lastName = _memberView.GetLastName();
+            bool isSocialNumValid = false;
+            Member member = new Member();
+            List<Member> members = _repository.GetAllMembers();
+            string socialSecurityNumber;
+            do
             {
-                string value = _memberView.getSearchValue();
-                return _dbContext.Boats().Find(b => b.Id == Convert.ToInt32(value));
+                try
+                {
+                    socialSecurityNumber = _memberView.GetSocialSecurityNumber();
+                    member.FirstName = firstName;
+                    member.LastName = lastName;
+                    member.SocialSecurityNum = new Member.SocialSecurityNumber(socialSecurityNumber);
+                    isSocialNumValid = true;
+
+                }
+                catch (Exception ex)
+                {
+                    isSocialNumValid = false;
+                    if (ex.Message == "Invalid Serial Number")
+                    {
+                        _memberView.DisplayErrorInvalidSerialNumber();
+                    }
+                }
+
+                // FINNS ID I DATABAS?
+                if(!memberIdTaken(member))
+                {
+                    return member;
+                }
             }
-            _memberView.displayErrorNoBoatFound();
+            while (!isSocialNumValid);
             return null;
         }
 
-        // kolla på sen
+        public void DisplayMembersVerbose(Member member)
+        {
+            _memberView.DisplayMembersVerbose(member);
+        }
+
+
         public Member selectMember()
         {
             Member member;
-            string parameter;
             do
             {
-                parameter = _memberView.getFirstName();
-                member = _dbContext.Members().Where(m => m.FirstName == parameter).FirstOrDefault();
+                int id = _memberView.GetMemberId();
+                member = _repository.SelectMemberById(id);
                 if (member == null)
                 {
-                    _memberView.displayMemberNotFound();
+                    _memberView.DisplayMemberNotFound();
                 }
             } while (member == null);
             return member;
         }
-
-        public void displayMembers()
-        {
-            _memberView.displayGetMemberDisplayFormat();
-            input = _memberView.getViewOperation();
-
-            if (input.Equals(ViewOperations.ShowMembersVerbose))
-                _dbContext.Members().ForEach(m => _memberView.displayMembersVerbose(m));
-            if (input.Equals(ViewOperations.ShowMembersCompact))
-                _dbContext.Members().ForEach(m => _memberView.displayMembersCompact(m));
-        }
-
-        public void memberNav()
-        {
-
-        }
-
     }
 }

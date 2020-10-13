@@ -1,1 +1,1 @@
-[{"boats":[{"Type":"Kayak","Id":33059,"Length":1231.0}],"FirstName":"Christoffer","LastName":"Lindow","Id":0,"SocialSecurityNum":1231}]
+[{"Boats":[{"BoatType":2,"Id":12954,"Length":31.0}],"FirstName":"Christoffer","LastName":"2","Id":86456,"SocialSecurityNum":{"SsNum":"9107044472","BirthDate":"1991-07-04T00:00:00","SerialNumber":4472}},{"Boats":[{"BoatType":0,"Id":15847,"Length":31.0}],"FirstName":"kristoffer","LastName":"Lindow","Id":31961,"SocialSecurityNum":{"SsNum":"9107044472","BirthDate":"1991-07-04T00:00:00","SerialNumber":4472}}]

@@ -1,5 +1,7 @@
 ﻿using System;
-using Factories;
+using Controller;
+using Persistence;
+using View;
 
 namespace assignment2
 {
@@ -7,8 +9,14 @@ namespace assignment2
     {
         static void Main(string[] args)
         {
-            Factory factory = new Factory();
-            factory.CreateMemberController(factory).mainNav();
+            MemberView memberView = new MemberView();
+            IDbContext context = new JsonContext();
+            Repository repository = new Repository(context);
+            BoatController boatController = new BoatController(new BoatView(), repository);
+            MemberController memberController = new MemberController(new MemberView(),repository);
+            MainController mainController = new MainController(boatController, memberController);
+            
+            mainController.DisplayMainNav();
         }
     }
 }

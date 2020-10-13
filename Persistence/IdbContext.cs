@@ -8,5 +8,6 @@ namespace Persistence
         List<Boat> Boats();
         List<Member> Members();
         void SaveChanges();
+
     }
 }

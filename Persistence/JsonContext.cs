@@ -15,7 +15,7 @@ namespace Persistence
 
         public JsonContext()
         {
-            members = loadData();
+            members = LoadData();
             boats = LoadBoats();
         }
 
@@ -24,7 +24,7 @@ namespace Persistence
             List<Boat> boats = new List<Boat>();
             foreach (Member member in members)
             {
-                foreach (Boat boat in member.boats)
+                foreach (Boat boat in member.Boats)
                 {
                     boats.Add(boat);
                 }
@@ -32,7 +32,7 @@ namespace Persistence
             return boats;
         }
 
-        private List<Member> loadData()
+        private List<Member> LoadData()
         {
             List<Member> memberList = new List<Member>();
 

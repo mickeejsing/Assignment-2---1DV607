@@ -5,8 +5,8 @@ namespace Persistence
 {
     public interface IDbContext
     {
-        List<Boat> Boats();
-        List<Member> Members();
+        List<Boat> GetBoats();
+        List<Member> GetMembers();
         void SaveChanges();
 
     }

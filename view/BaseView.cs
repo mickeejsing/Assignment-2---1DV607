@@ -251,7 +251,7 @@ namespace View
         }
         public int GetBoatId()
         {
-            Console.Write("Input id to delete: ");
+            Console.Write("Input Boat Id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
             //TODO try-catch

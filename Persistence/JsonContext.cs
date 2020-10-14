@@ -39,7 +39,7 @@ namespace Persistence
             bool dataDirExists = Directory.Exists("./data");
 
             if(!dataDirExists) {
-                Console.WriteLine("Creating data directory");
+               // Console.WriteLine("Creating data directory");
                 Directory.CreateDirectory("data");
             }
             try
@@ -51,8 +51,8 @@ namespace Persistence
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("Creating file");
+               //  Console.WriteLine(ex.Message);
+                //Console.WriteLine("Creating file");
                 FileStream fs = File.Create(dataPath);
                 fs.Close();
                 StreamWriter sw = new StreamWriter(dataPath);
@@ -62,12 +62,12 @@ namespace Persistence
             return new List<Member>();
         }
 
-        public List<Boat> Boats()
+        public List<Boat> GetBoats()
         {
             return boats;
         }
 
-        public List<Member> Members()
+        public List<Member> GetMembers()
         {
             return members;
         }

@@ -16,6 +16,8 @@ namespace Controller
             _boatView = boatView;
             _repository = repository;
         }
+
+        // Get ViewOperation Enum
         public Enum DisplayManageMemberBoats()
         {
             _boatView.DisplayManageMemberBoats();
@@ -27,99 +29,65 @@ namespace Controller
             _boatView.DisplayBoatOptions();
             return _boatView.GetViewOperation();
         }
-        public void ManageBoat()
+        public Enum DisplaySelectedBoatOptions()
         {
-            Boat boat = SearchBoatById();
-            if (boat != null)
-            {
-                HandleEditBoat(boat);
-            }
-            else
-                _boatView.DisplayErrorBoatNotFound();
+            _boatView.DisplaySelectedBoatOptions();
 
+            return _boatView.GetViewOperation();
         }
 
-        public void HandleDisplaySingleBoat()
-        {
-            var boats = SearchBoat().GetEnumerator();
+        // Displays
 
-            if (boats.Current == null)
+        public void DisplaySingleBoat(Boat boat)
+        {
+            if (boat == null)
                 _boatView.DisplayErrorBoatNotFound();
             else
-                while(boats.Current != null)
-                {
-                    _boatView.DisplaySingleBoat(boats.Current);
-                    boats.MoveNext();
-                }
+                _boatView.DisplaySingleBoat(boat);
         }
 
-        public void HandleEditBoat(Boat boat)
+        public void DisplayErrorBoatNotFound()
         {
-            if (boat != null)
-            {
-                _boatView.DisplaySelectedBoatOptions();
-                input = _boatView.GetViewOperation();
-
-                switch (input)
-                {
-                    case ViewOperations.EditBoatLength: HandleEditLBoatLength(boat); break;
-                    case ViewOperations.EditBoatType: HandleEditBoatType(boat); break;
-                    case ViewOperations.DeleteBoat: HandleDeleteBoat(boat); break;
-                    default: HandleEditBoat(boat); break;
-                }
-
-            }
-            else
-                _boatView.DisplayErrorBoatNotFound();
+            _boatView.DisplayErrorBoatNotFound();
         }
 
-        public void ShowAllBoats()
-        {
-            List<Boat> boats = _repository.GetAllBoats();
-            if (boats.Count != 0)
-                _boatView.DisplayAllBoats(boats);
-            else
-                _boatView.DisplayErrorBoatNotFound();
-        }
+        // Main menu
 
-
-        public IEnumerable<Boat> SearchBoat()
-        {
-            {
-                ShowAllBoats();
-                string param = _boatView.GetSearchParam();
-                
-
-                switch (param)
-                {
-                    case "Type": return HandleFindBoatByType();
-                    case "Length": return HandleFindBoatByLength(); 
-                    default: return null;
-                }
-            }
-        }
-        public Boat SearchBoatById()
-        {
-            return HandleFindBoatById();
-        }
-        public IEnumerable<Boat> HandleFindBoatByType()
+        // Find Boats
+        public List<Boat> FindBoatsByType()
         {
             string type = _boatView.GetSearchValue();
             return _repository.FindBoatByType(type);
         }
-        public Boat HandleFindBoatById()
+        public Boat FindBoatById()
         {
             int id = _boatView.GetBoatId();
             return _repository.FindBoatById(id);
         }
 
-        public IEnumerable<Boat> HandleFindBoatByLength()
+        public List<Boat> FindBoatsByLength()
         {
             double length = _boatView.GetBoatLength();
             return _repository.FindBoatByLength(length);
         }
 
-        public void HandleDeleteBoat(Boat boat)
+        public Boat SelectBoat()
+        {
+            List<Boat> boats = _repository.GetAllBoats();
+            _boatView.DisplayAllBoats(boats);
+            Boat boat = FindBoatById();
+            if (boat != null)
+            {
+                return boat;
+            }
+            else
+                _boatView.DisplayErrorBoatNotFound();
+                return null;
+        }
+
+        // CRUD
+
+        public void DeleteBoat(Boat boat)
         {
             Member member = _repository.GetOwnerOfBoat(boat);
             if (member != null)
@@ -128,35 +96,21 @@ namespace Controller
                 _boatView.DisplayMemberNotFound();
         }
 
-        public void HandleEditLBoatLength(Boat boat)
+        public void EditLBoatLength(Boat boat)
         {
 
             double boatLength = _boatView.GetBoatLength();
-
-            Member member = _repository.GetOwnerOfBoat(boat);
-            {
-                _repository.RemoveBoatFromMember(member, boat);
-                boat.Length = boatLength;
-                _repository.AddBoatToMember(member, boat);
-            }
-
+            _repository.EditBoatLength(boat, boatLength);
         }
 
-        public void HandleEditBoatType(Boat boat)
+
+        public void EditBoatType(Boat boat)
         {
             BoatType boatType = _boatView.GetBoatType();
-            Member member = _repository.GetOwnerOfBoat(boat);
-            {
-                if (member != null)
-                {
-                    _repository.RemoveBoatFromMember(member, boat);
-                    boat.BoatType = boatType;
-                    _repository.AddBoatToMember(member, boat);
-                }
-            }
+            _repository.EditBoatType(boat, boatType);
         }
 
-        public Boat HandleCreateBoat()
+        public Boat CreateBoat()
         {
             BoatType boatType = _boatView.GetBoatType();
             double boatLength = _boatView.GetBoatLength();
@@ -172,11 +126,43 @@ namespace Controller
             _repository.AddBoatToMember(member, boat);
         }
 
-        public void HandleDeleteBoat(Member selectedMember)
+        public void DeleteBoat(Member selectedMember)
         {
-            _boatView.DisplayMemberBoatInfo(selectedMember);
-            Boat boatFromSearch = SearchBoatById();
-            _repository.RemoveBoatFromMember(selectedMember, boatFromSearch);
+            if (selectedMember.Boats.Count > 0)
+            {
+                _boatView.DisplayMemberBoatInfo(selectedMember);
+                Boat boatFromSearch = FindBoatById();
+                _repository.RemoveBoatFromMember(selectedMember, boatFromSearch);
+            }
+            else
+            {
+                _boatView.DisplayErrorBoatNotFound();
+            }
         }
+        public void ShowAllBoats()
+        {
+            List<Boat> boats = _repository.GetAllBoats();
+            if (boats.Count != 0)
+                _boatView.DisplayAllBoats(boats);
+            else
+                _boatView.DisplayErrorBoatNotFound();
+        }
+        public List<Boat> SearchBoat()
+        {
+            {
+                ShowAllBoats();
+                string param = _boatView.GetSearchParam();
+
+
+                switch (param)
+                {
+                    case "Type": return FindBoatsByType();
+                    case "Length": return FindBoatsByLength();
+                    default: return null;
+                }
+            }
+        }
+
+
     }
 }

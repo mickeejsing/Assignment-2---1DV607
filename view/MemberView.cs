@@ -18,7 +18,7 @@ namespace View
 
         public void DisplayEditMemberOptions()
         {
-            Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back to secretary options [s] ");
+            Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back [selm]");
         }
 
         public void DisplaySelectedMemberOptions()
@@ -30,7 +30,7 @@ namespace View
 
         public void DisplayMemberOptions()
         {
-            Console.WriteLine("Create member [cm] Show members [sm] Select member [selm]");
+            Console.WriteLine("Create member [cm] Show members [sm] Select member [selm] Back to main Options [2]");
         }
         public string GetSocialSecurityNumber()
         {
@@ -46,12 +46,13 @@ namespace View
                     socialSecurityNumber = Convert.ToInt64(Console.ReadLine());
                     string socialSecurityNumberStr = socialSecurityNumber.ToString();
 
-                    if(socialSecurityNumberStr.Length == 10)
+                    if (socialSecurityNumberStr.Length == 10)
                     {
                         Console.WriteLine(isValid);
                         isValid = true;
                     }
-                    else {
+                    else
+                    {
                         Console.WriteLine("The social security number has to be 10 numbers yyddmmnnnn: ");
                     }
                 }
@@ -73,13 +74,18 @@ namespace View
             string firstName = Console.ReadLine();
             return firstName;
         }
+        public void DisplayErrorNoMembers()
+        {
+            Console.WriteLine("Sorry no memberse were found...");
+        }
 
         public int GetMemberId()
         {
-            Console.Write("Type the member id you want to select: ");
             int id = 0;
             bool isString = true;
-            while(isString)
+            while (isString)
+            {
+                Console.Write("Type the member id you want to select or press [ 0 ] to go back: ");
                 try
                 {
                     id = Convert.ToInt32(Console.ReadLine());
@@ -88,8 +94,8 @@ namespace View
                 catch (Exception ex)
                 {
                     Console.WriteLine("Please only numbers");
-                    isString = true;
                 }
+            }
             return id;
         }
 
@@ -116,8 +122,16 @@ namespace View
             Console.WriteLine($"Name: {member.FirstName} {member.LastName}");
             Console.WriteLine($"Date of Birth: {member.SocialSecurityNum} ");
             Console.WriteLine($"Member Id: {member.Id} ");
+
             Console.WriteLine("===============BOATS================");
-            DisplayMemberBoatInfo(member);
+            if (member.Boats.Count > 0)
+            {
+                DisplayMemberBoatInfo(member);
+            }
+            else
+            {
+                Console.WriteLine("No boats found");
+            }
         }
 
 

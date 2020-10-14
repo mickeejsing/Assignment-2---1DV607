@@ -14,12 +14,12 @@ namespace Persistence
 
         public List<Boat> GetAllBoats()
         {
-            return _context.Boats();
+            return _context.GetBoats();
         }
 
         public List<Member> GetAllMembers()
         {
-            return _context.Members();
+            return _context.GetMembers();
         }
 
         public Member SelectMemberById(int id)
@@ -30,38 +30,54 @@ namespace Persistence
         }
         public void ChangeFirstName(Member member, string firstName)
         {
-                _context.Members().Find(m => member == m).FirstName = firstName;
-                _context.SaveChanges();
+            _context.GetMembers().Find(m => member == m).FirstName = firstName;
+            _context.SaveChanges();
         }
 
-                public void ChangeLastName(Member member, string lastName)
+        public void ChangeLastName(Member member, string lastName)
         {
-                _context.Members().Find(m => member == m).FirstName = lastName;
-                _context.SaveChanges();
+            _context.GetMembers().Find(m => member == m).LastName = lastName;
+            _context.SaveChanges();
         }
 
         public void RemoveBoatFromMember(Member member, Boat boat)
         {
-            _context.Members().Find(m => m == member).Boats.Remove(boat);
-            _context.Boats().Remove(boat);
+            _context.GetMembers().Find(m => m == member).Boats.Remove(boat);
+            _context.GetBoats().Remove(boat);
             _context.SaveChanges();
         }
 
         public void AddBoatToMember(Member member, Boat boat)
         {
-            _context.Members().Find(m => m == member).Boats.Add(boat);
+            _context.GetMembers().Find(m => m == member).Boats.Add(boat);
+            _context.SaveChanges();
+        }
+        public void EditBoatLength(Boat boat, double length)
+        {
+            _context.GetBoats().Find(b => b == boat).Length = length;
+            SaveChanges();
+        }
+
+        public void EditBoatType(Boat boat, BoatType boatType)
+        {
+            _context.GetBoats().Find(b => b == boat).BoatType = boatType;
+            SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
 
         public void AddMember(Member member)
         {
-            _context.Members().Add(member);
+            _context.GetMembers().Add(member);
             _context.SaveChanges();
         }
 
         public void RemoveMember(Member member)
         {
-            _context.Members().Remove(member);
+            _context.GetMembers().Remove(member);
             _context.SaveChanges();
         }
 
@@ -81,19 +97,17 @@ namespace Persistence
 
         public Boat FindBoatById(int id)
         {
-            return _context.Boats().Find(b => b.Id == id);
+            return _context.GetBoats().Find(b => b.Id == id);
         }
 
-        public IEnumerable<Boat> FindBoatByType(string type)
+        public List<Boat> FindBoatByType(string type)
         {
-            return _context.Boats().FindAll(b => b.BoatType.ToString() == type);
+            return _context.GetBoats().FindAll(b => b.BoatType.ToString() == type);
         }
 
-        public IEnumerable<Boat> FindBoatByLength(double length)
+        public List<Boat> FindBoatByLength(double length)
         {
-            return _context.Boats().FindAll(b => b.Length == length);
+            return _context.GetBoats().FindAll(b => b.Length == length);
         }
-
-
     }
 }

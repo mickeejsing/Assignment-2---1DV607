@@ -7,7 +7,6 @@ namespace Model
     public class Member
     {
 
-
         public Member()
         {
             Random rnd = new Random();
@@ -15,33 +14,14 @@ namespace Model
             Boats = new List<Boat>();
         }
         public List<Boat> Boats { get; set; }
-
-        public string FirstName
-        {
-            set;
-            get;
-        }
-
-        public string LastName
-        {
-            set;
-            get;
-        }
-        public int Id
-        {
-            get;
-            set;
-        }
-
-        public SocialSecurityNumber SocialSecurityNum
-        {
-            set;
-            get;
-        }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Id { get; set; }
+        public SocialSecurityNumber SocialSecurityNum {get; set;}
 
         public class SocialSecurityNumber
         {
-            public string SsNum { get; set; } // social security number
+            public string SsNum { get; set; } 
             public DateTime BirthDate { get; set; }
             public long SerialNumber { get; set; }
 
@@ -109,7 +89,7 @@ namespace Model
                         }
                     }
 
-                    int sumRoundedUp = 10 * ((sum + 9) / 10); 
+                    int sumRoundedUp = 10 * ((sum + 9) / 10);
                     int controlNum = sumRoundedUp - sum;
 
                     int lastDigit = Convert.ToInt32(ssNum.Substring(9, 1));
@@ -125,7 +105,6 @@ namespace Model
                     throw new Exception(ex.Data.ToString());
                 }
             }
-
         }
     }
 }

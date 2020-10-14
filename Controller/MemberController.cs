@@ -17,16 +17,23 @@ namespace Controller
             _repository = repository;
         }
 
-        
+
 
         public Member HandleSelectMember()
         {
             List<Member> members = _repository.GetAllMembers();
-
-            members.ForEach(m => _memberView.DisplayMembersCompact(m));
+            if (members.Count== 0)
+            {
+                _memberView.DisplayErrorNoMembers();
+            }
+            else 
+            {
+            members.ForEach(member => _memberView.DisplayMembersCompact(member));
             Member selectedMember = selectMember();
 
             return selectedMember;
+            }
+            return null;
         }
 
         public Enum DisplayLogin()
@@ -53,28 +60,37 @@ namespace Controller
         }
         public Enum DisplayMemberOptions()
         {
-            DisplayMemberOptions();
+            _memberView.DisplayMemberOptions();
             return _memberView.GetViewOperation();
         }
 
         public void HandleRemoveMember(Member member)
         {
             _repository.RemoveMember(member);
+
         }
 
         public void HandleDisplayMembers()
         {
-            _memberView.DisplayGetMemberDisplayFormat();
-            input = _memberView.GetViewOperation();
             List<Member> members = _repository.GetAllMembers();
-
-            switch (input)
+            if (members.Count == 0)
             {
-                case ViewOperations.ShowMembersVerbose:
-                    members.ForEach(m => _memberView.DisplayMembersVerbose(m)); break;
-                case ViewOperations.ShowMembersCompact:
-                    members.ForEach(m => _memberView.DisplayMembersCompact(m)); break;
-                default: HandleDisplayMembers(); break;
+                _memberView.DisplayErrorNoMembers();
+            }
+            else
+            {
+                _memberView.DisplayGetMemberDisplayFormat();
+                input = _memberView.GetViewOperation();
+                {
+                    switch (input)
+                    {
+                        case ViewOperations.ShowMembersVerbose:
+                            members.ForEach(m => _memberView.DisplayMembersVerbose(m)); break;
+                        case ViewOperations.ShowMembersCompact:
+                            members.ForEach(m => _memberView.DisplayMembersCompact(m)); break;
+                        default: HandleDisplayMembers(); break;
+                    }
+                }
             }
         }
 
@@ -82,31 +98,31 @@ namespace Controller
         {
             _memberView.DisplayEditMemberOptions();
             input = _memberView.GetViewOperation();
+            bool stayInMenu = true;
 
             switch (input)
             {
                 case ViewOperations.EditFirstName:
-                    EditFirstName(member);
-                    HandleEditMember(member); break;
+                    EditFirstName(member); break;
                 case ViewOperations.EditLastName:
-                    EditLastName(member);
-                    HandleEditMember(member); break;
-                default: HandleEditMember(member); break;
+                    EditLastName(member); break;
+                case ViewOperations.SelectMember:
+                    stayInMenu = false; break;
             }
+            if (stayInMenu)
+                HandleEditMember(member);
         }
 
         public void EditFirstName(Member member)
         {
             string firstName = _memberView.GetFirstName();
             _repository.ChangeFirstName(member, firstName);
-            input = ViewOperations.EditMember;
         }
 
         public void EditLastName(Member member)
         {
             string lastName = _memberView.GetLastName();
             _repository.ChangeLastName(member, lastName);
-            input = ViewOperations.EditMember;
         }
 
         public void ShowAllBoats()
@@ -115,25 +131,25 @@ namespace Controller
             _memberView.DisplayAllBoats(boats);
         }
 
-        public void HandleAddMember(Member member)
+        public void AddMember(Member member)
         {
-                member = HandleCreateMember();
+            _repository.AddMember(member);
         }
 
-        public bool memberIdTaken(Member member)
+        public bool MemberIdTaken(Member member)
         {
             List<Member> members = _repository.GetAllMembers();
-                            foreach (Member memberInCollection in members)
+            foreach (Member memberInCollection in members)
+            {
+                if (member.Id == memberInCollection.Id)
                 {
-                    if (member.Id == memberInCollection.Id)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                return false;
+            }
+            return false;
         }
 
-        public Member HandleCreateMember()
+        public Member CreateMember()
         {
             string firstName = _memberView.GetFirstName();
             string lastName = _memberView.GetLastName();
@@ -141,7 +157,7 @@ namespace Controller
             Member member = new Member();
             List<Member> members = _repository.GetAllMembers();
             string socialSecurityNumber;
-            do
+            while (!isSocialNumValid && !MemberIdTaken(member))
             {
                 try
                 {
@@ -149,26 +165,22 @@ namespace Controller
                     member.FirstName = firstName;
                     member.LastName = lastName;
                     member.SocialSecurityNum = new Member.SocialSecurityNumber(socialSecurityNumber);
-                    isSocialNumValid = true;
 
+                    if (member.SocialSecurityNum != null)
+                    {
+                        isSocialNumValid = true;
+                    }
+                    Console.WriteLine(isSocialNumValid);
                 }
                 catch (Exception ex)
                 {
-                    isSocialNumValid = false;
                     if (ex.Message == "Invalid Serial Number")
                     {
                         _memberView.DisplayErrorInvalidSerialNumber();
                     }
                 }
-
-                // FINNS ID I DATABAS?
-                if(!memberIdTaken(member))
-                {
-                    return member;
-                }
             }
-            while (!isSocialNumValid);
-            return null;
+            return member;
         }
 
         public void DisplayMembersVerbose(Member member)
@@ -176,13 +188,16 @@ namespace Controller
             _memberView.DisplayMembersVerbose(member);
         }
 
-
-        public Member selectMember()
+        public Member SelectMember()
         {
             Member member;
             do
             {
                 int id = _memberView.GetMemberId();
+                if (id == 0)
+                {
+                    return null;
+                }
                 member = _repository.SelectMemberById(id);
                 if (member == null)
                 {

@@ -40,9 +40,9 @@ namespace Persistence
             _context.SaveChanges();
         }
 
-        public void RemoveBoatFromMember(Member member, Boat boat)
+        public void RemoveBoatFromMember(Boat boat)
         {
-            _context.GetMembers().Find(m => m == member).Boats.Remove(boat);
+            _context.GetMembers().Find(m => m.Boats.Contains(boat)).Boats.Remove(boat);
             _context.GetBoats().Remove(boat);
             _context.SaveChanges();
         }
@@ -98,16 +98,6 @@ namespace Persistence
         public Boat FindBoatById(int id)
         {
             return _context.GetBoats().Find(b => b.Id == id);
-        }
-
-        public List<Boat> FindBoatByType(string type)
-        {
-            return _context.GetBoats().FindAll(b => b.BoatType.ToString() == type);
-        }
-
-        public List<Boat> FindBoatByLength(double length)
-        {
-            return _context.GetBoats().FindAll(b => b.Length == length);
         }
     }
 }

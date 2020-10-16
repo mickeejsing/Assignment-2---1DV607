@@ -10,35 +10,40 @@ namespace Controller
     {
         private readonly MemberView _memberView;
         private readonly Repository _repository;
-        private Enum input;
         public MemberController(MemberView memberView, Repository repository)
         {
             _memberView = memberView;
             _repository = repository;
         }
-
-
-
         public Member HandleSelectMember()
         {
             List<Member> members = _repository.GetAllMembers();
-            if (members.Count== 0)
+            if (members.Count == 0)
             {
                 _memberView.DisplayErrorNoMembers();
             }
-            else 
+            else
             {
-            members.ForEach(member => _memberView.DisplayMembersCompact(member));
-            Member selectedMember = SelectMember();
+                members.ForEach(member => _memberView.DisplayMembersCompact(member));
+                Member selectedMember = SelectMember();
 
-            return selectedMember;
+                return selectedMember;
             }
             return null;
+        }
+        public bool Login()
+        {
+            return _memberView.Login();
         }
 
         public Enum DisplayLogin()
         {
             _memberView.DisplayLogin();
+            return _memberView.GetViewOperation();
+        }
+        public Enum DisplayGuestOptions()
+        {
+            _memberView.DisplayGuestOptions();
             return _memberView.GetViewOperation();
         }
 
@@ -64,53 +69,11 @@ namespace Controller
             return _memberView.GetViewOperation();
         }
 
+        // Methods
         public void RemoveMember(Member member)
         {
             _repository.RemoveMember(member);
 
-        }
-
-        public void DisplayMembers()
-        {
-            List<Member> members = _repository.GetAllMembers();
-            if (members.Count == 0)
-            {
-                _memberView.DisplayErrorNoMembers();
-            }
-            else
-            {
-                _memberView.DisplayGetMemberDisplayFormat();
-                input = _memberView.GetViewOperation();
-                {
-                    switch (input)
-                    {
-                        case ViewOperations.ShowMembersVerbose:
-                            members.ForEach(m => _memberView.DisplayMembersVerbose(m)); break;
-                        case ViewOperations.ShowMembersCompact:
-                            members.ForEach(m => _memberView.DisplayMembersCompact(m)); break;
-                        default: DisplayMembers(); break;
-                    }
-                }
-            }
-        }
-
-        public void HandleEditMember(Member member)
-        {
-            _memberView.DisplayEditMemberOptions();
-            input = _memberView.GetViewOperation();
-            bool stayInMenu = true;
-
-            switch (input)
-            {
-                case ViewOperations.EditFirstName:
-                    EditFirstName(member); break;
-                case ViewOperations.EditLastName:
-                    EditLastName(member); break;
-                case ViewOperations.SelectMember:
-                    stayInMenu = false; break;
-            }
-            if (stayInMenu)
-                HandleEditMember(member);
         }
 
         public void EditFirstName(Member member)
@@ -125,17 +88,27 @@ namespace Controller
             _repository.ChangeLastName(member, lastName);
         }
 
-        public void ShowAllBoats()
-        {
-            List<Boat> boats = _repository.GetAllBoats();
-            _memberView.DisplayAllBoats(boats);
-        }
-
         public void AddMember(Member member)
         {
             _repository.AddMember(member);
         }
 
+        public bool RepositoryIsEmpty()
+        {
+            return _repository.GetAllMembers().Count == 0;
+        }
+
+        public void DisplayMembersVerbose()
+        {
+            List<Member> members = _repository.GetAllMembers();
+            members.ForEach(member => _memberView.DisplayMembersVerbose(member));
+        }
+
+        public void DisplayMembersCompact()
+        {
+            List<Member> members = _repository.GetAllMembers();
+            members.ForEach(member => _memberView.DisplayMembersCompact(member));
+        }
         public bool MemberIdTaken(Member member)
         {
             List<Member> members = _repository.GetAllMembers();
@@ -187,6 +160,16 @@ namespace Controller
         {
             _memberView.DisplayMembersVerbose(member);
         }
+        public void DisplayNoMembers()
+        {
+            _memberView.DisplayErrorNoMembers();
+        }
+
+        public Enum DisplayGetMemberDisplayFormat()
+        {
+            _memberView.DisplayGetMemberDisplayFormat();
+            return _memberView.GetViewOperation();
+        }                 
 
         public Member SelectMember()
         {

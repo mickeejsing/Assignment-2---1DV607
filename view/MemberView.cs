@@ -7,8 +7,20 @@ namespace View
         public void DisplayLogin()
         {
             Console.WriteLine("Login screen");
-            Console.WriteLine("Member [1]");
-            Console.WriteLine("Secretary [2]");
+            Console.WriteLine("Continue as guest [1]");
+            Console.WriteLine("Login [2]");
+        }
+        public bool Login()
+        {
+            Console.WriteLine("=====LOGIN=====");
+            Console.WriteLine("Password is 123456");
+            Console.Write("Input password: ");
+            string password = Console.ReadLine();
+
+            if(password == "123456")
+                return true;
+            return false;
+
         }
         public void DisplayMainOptions()
         {
@@ -20,17 +32,33 @@ namespace View
         {
             Console.WriteLine("Edit Member First name [ef] Edit Member Last name [el] Back [selm]");
         }
+        public void DisplayGuestOptions()
+        {
+            Console.WriteLine("Display all users [sm], Display all boats [sab], Go to login [2], Search [X]");
+        }
 
         public void DisplaySelectedMemberOptions()
         {
             Console.WriteLine("Delete member [dm] Edit member [em] Manage boats [mmb] Show member details [md] Back to Secretary Options [s]");
         }
 
-
-
         public void DisplayMemberOptions()
         {
             Console.WriteLine("Create member [cm] Show members [sm] Select member [selm] Back to main Options [2]");
+        }
+        public void DisplayMemberUpdated(Member member)
+        {
+            Console.WriteLine($"Member with Id: {member.Id} was updated");
+        }
+        public void DisplayMemberNotFound()
+        {
+            Console.WriteLine("Sorry, the member was not found");
+        }
+
+        public void DisplayMemberDeleted()
+        {
+            Console.WriteLine("The Member was deleted");
+
         }
         public string GetSocialSecurityNumber()
         {
@@ -136,11 +164,6 @@ namespace View
             Console.WriteLine("Show Members Verbose [smv] Show Members Compact [smc]");
         }
 
-        public void DisplayBoatOptions()
-        {
-            Console.WriteLine("Register boat [1] Delete boat [2] Change boat information [3]");
-        }
-
         public void DisplayMembersVerbose(Member member)
         {
             Console.WriteLine("===============MEMBER===============");
@@ -151,16 +174,16 @@ namespace View
             Console.WriteLine("===============BOATS================");
             if (member.Boats.Count > 0)
             {
-                DisplayMemberBoatInfo(member);
+                foreach (Boat boat in member.Boats)
+                {
+                    Console.WriteLine($"Boat type: {boat.BoatType.ToString()}, Boat Length: {boat.Length}, Boat Id: {boat.Id}");
+                }
             }
             else
             {
                 Console.WriteLine("No boats found");
             }
         }
-
-
-
         public void DisplayMembersCompact(Member member)
         {
             Console.WriteLine($"Name: {member.FirstName} {member.LastName}, Id: {member.Id}, Number of boats: {member.Boats.Count}");

@@ -56,7 +56,7 @@ namespace View
                         Console.WriteLine("The social security number has to be 10 numbers yyddmmnnnn: ");
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     Console.WriteLine("Please only numbers");
                 }
@@ -70,9 +70,39 @@ namespace View
         }
         public string GetFirstName()
         {
-            Console.Write("Type The members first name: ");
-            string firstName = Console.ReadLine();
+            bool containsToSymbols = false;
+            string firstName = "";
+            while (!containsToSymbols)
+            {
+                Console.Write("Type The members first name: ");
+                firstName = Console.ReadLine();
+                containsToSymbols = ValidateOnlyAlphabetical(firstName);
+            }
             return firstName;
+        }
+
+        public string GetLastName()
+        {
+            bool containsToSymbols = false;
+            string lastName = "";
+            while (!containsToSymbols)
+            {
+                Console.Write("Type The members Last name: ");
+                lastName = Console.ReadLine();
+                containsToSymbols = ValidateOnlyAlphabetical(lastName);
+            }
+            return lastName;
+        }
+        private bool ValidateOnlyAlphabetical(string str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (!Char.IsLetter(str[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public void DisplayErrorNoMembers()
         {
@@ -91,7 +121,7 @@ namespace View
                     id = Convert.ToInt32(Console.ReadLine());
                     isString = false;
                 }
-                catch (Exception ex)
+                catch
                 {
                     Console.WriteLine("Please only numbers");
                 }
@@ -99,12 +129,7 @@ namespace View
             return id;
         }
 
-        public string GetLastName()
-        {
-            Console.Write("Type The members last name: ");
-            string lastName = Console.ReadLine();
-            return lastName;
-        }
+
 
         public void DisplayGetMemberDisplayFormat()
         {
@@ -138,7 +163,7 @@ namespace View
 
         public void DisplayMembersCompact(Member member)
         {
-            Console.WriteLine($"{member.FirstName} {member.LastName} Id: {member.Id} Boats: {member.Boats.Count}");
+            Console.WriteLine($"Name: {member.FirstName} {member.LastName}, Id: {member.Id}, Number of boats: {member.Boats.Count}");
         }
     }
 }

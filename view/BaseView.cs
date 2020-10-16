@@ -75,7 +75,8 @@ namespace View
         {
             foreach (Boat boat in member.Boats)
             {
-                Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
+                Console.Write($"Boat type: {boat.BoatType.ToString()} \nBoat Length: {boat.Length} Meters \nBoat Id: {boat.Id} \n");
+                Console.WriteLine("--------------------------");
             }
             Console.WriteLine("====================================");
         }
@@ -102,7 +103,24 @@ namespace View
             string value = Console.ReadLine();
             return value;
         }
+        public void DisplayBoatDeleted()
+        {
+            Console.WriteLine("The boat was deleted");
+        }
 
+        public void DisplayMemberDeleted()
+        {
+            Console.WriteLine("The Member was deleted");
+
+        }
+        public void DisplayMemberUpdated(Member member)
+        {
+            Console.WriteLine($"Member with Id: {member.Id} was updated");
+        }
+        public void DisplayBoatUpdated(Boat boat)
+        {
+            Console.WriteLine($"Boat with Id: {boat.Id} was updated");
+        }
         public string GetBoatTypeValue()
         {
             Console.Write("Chose which Boat Type to filter on");
@@ -113,7 +131,7 @@ namespace View
         {
             foreach (Boat boat in boats)
             {
-                Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
+                Console.WriteLine($"Boat Type: {boat.BoatType.ToString()}, Length: {boat.Length}, Boat Id: {boat.Id}");
             }
         }
         public string GetSearchParam()
@@ -125,7 +143,7 @@ namespace View
 
         public void DisplaySingleBoat(Boat boat)
         {
-            Console.WriteLine($"{boat.BoatType.ToString()} {boat.Length} {boat.Id}");
+            Console.WriteLine($"Boat type: {boat.BoatType.ToString()}, Boat Length: {boat.Length}, Boat Id: {boat.Id}");
         }
         protected String UppercaseFirstlLetter(string str)
         {
@@ -166,9 +184,9 @@ namespace View
                     valid = true;
 
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    Console.WriteLine("Exception message: " + ex.Message);
+                    Console.WriteLine("Please only use numbers");
                 }
             }
 

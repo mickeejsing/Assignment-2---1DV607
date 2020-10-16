@@ -46,12 +46,12 @@ namespace Controller
             switch (input)
             {
                 case ViewOperations.CreateMember:
-                    Member member = _memberController.HandleCreateMember();
+                    Member member = _memberController.CreateMember();
                     Boat boat = _boatController.CreateBoat();
                     member.Boats.Add(boat);
-                    _memberController.HandleAddMember(member);
+                    _memberController.AddMember(member);
                     break;
-                case ViewOperations.ShowMembers: _memberController.HandleDisplayMembers(); break;
+                case ViewOperations.ShowMembers: _memberController.DisplayMembers(); break;
                 case ViewOperations.SelectMember:
                     Member selectedMember = _memberController.HandleSelectMember();
                     if (selectedMember != null)
@@ -69,7 +69,7 @@ namespace Controller
             switch (input)
             {
                 case ViewOperations.DeleteMember:
-                    _memberController.HandleRemoveMember(selectedMember);
+                    _memberController.RemoveMember(selectedMember);
                     MemberHandler(); break;
                 case ViewOperations.ShowMemberDetails: _memberController.DisplayMembersVerbose(selectedMember); break;
                 case ViewOperations.SecretaryOptions: DisplayOptionsNav(); break;
@@ -89,9 +89,27 @@ namespace Controller
                     Boat boat = _boatController.CreateBoat();
                     _boatController.AddBoatToMember(selectedMember, boat); break;
                 case ViewOperations.DeleteMemberBoat:
-                    _boatController.DeleteBoat(selectedMember); break;
-                case ViewOperations.EditMemberBoat: break;
+                    bool boatDeleted = _boatController.DeleteBoat(selectedMember);
+                    if (boatDeleted)
+                        _boatController.DisplayBoatDeleted(); break;
+                case ViewOperations.EditMemberBoat: HandleMemberEditBoats(selectedMember); break;
                 default: HandleManageBoats(selectedMember); break;
+            }
+        }
+        public void HandleMemberEditBoats(Member member)
+        {
+            _boatController.DisplayManageMemberBoats(member);
+            Boat boatFromSearch = _boatController.FindBoatById();
+            if (boatFromSearch != null)
+            {
+            input = _boatController.DisplayMemberSelectedBoatOptions();
+            switch (input)
+            {
+                case ViewOperations.EditBoatLength: _boatController.EditLBoatLength(boatFromSearch); break;
+                case ViewOperations.EditBoatType: _boatController.EditBoatType(boatFromSearch); break;
+                case ViewOperations.SecretaryOptions: DisplayMainNav(); break;
+                default: HandleMemberEditBoats(member); break;
+            }
             }
         }
 
@@ -125,13 +143,13 @@ namespace Controller
             switch (input)
             {
                 case ViewOperations.ShowAllBoats: _boatController.ShowAllBoats(); break;
-                case ViewOperations.ShowBoatFromId: _boatController.SearchBoat(); break;
-                case ViewOperations.EditBoat:
-                    Boat boat = _boatController.FindBoatById();
+                case ViewOperations.EditBoat: _boatController.ShowAllBoats();
+                Boat boat = _boatController.FindBoatById();
                     HandleEditBoat(boat); break;
+                case ViewOperations.SecretaryOptions: DisplayOptionsNav(); break;
                 default: BoatHandler(); break;
             }
-        }
+            BoatHandler();        }
 
         public void HandleEditBoat(Boat boat)
         {
@@ -145,6 +163,7 @@ namespace Controller
                     case ViewOperations.EditBoatType: _boatController.EditBoatType(boat); break;
                     case ViewOperations.DeleteBoat: _boatController.DeleteBoat(boat); break;
                     case ViewOperations.ManageBoats: BoatHandler(); break;
+                    case ViewOperations.SecretaryOptions: DisplayOptionsNav(); break;
                     default: HandleEditBoat(boat); break;
                 }
             }

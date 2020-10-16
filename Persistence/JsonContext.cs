@@ -49,7 +49,7 @@ namespace Persistence
                 reader.Close();
                 return memberList;
             }
-            catch (Exception ex)
+            catch
             {
                //  Console.WriteLine(ex.Message);
                 //Console.WriteLine("Creating file");

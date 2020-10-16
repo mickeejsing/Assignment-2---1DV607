@@ -29,7 +29,7 @@ namespace Controller
             else 
             {
             members.ForEach(member => _memberView.DisplayMembersCompact(member));
-            Member selectedMember = selectMember();
+            Member selectedMember = SelectMember();
 
             return selectedMember;
             }
@@ -64,13 +64,13 @@ namespace Controller
             return _memberView.GetViewOperation();
         }
 
-        public void HandleRemoveMember(Member member)
+        public void RemoveMember(Member member)
         {
             _repository.RemoveMember(member);
 
         }
 
-        public void HandleDisplayMembers()
+        public void DisplayMembers()
         {
             List<Member> members = _repository.GetAllMembers();
             if (members.Count == 0)
@@ -88,7 +88,7 @@ namespace Controller
                             members.ForEach(m => _memberView.DisplayMembersVerbose(m)); break;
                         case ViewOperations.ShowMembersCompact:
                             members.ForEach(m => _memberView.DisplayMembersCompact(m)); break;
-                        default: HandleDisplayMembers(); break;
+                        default: DisplayMembers(); break;
                     }
                 }
             }

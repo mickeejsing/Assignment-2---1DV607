@@ -10,7 +10,6 @@ namespace Controller
     {
         private readonly BoatView _boatView;
         private readonly Repository _repository;
-        Enum input;
         public BoatController(BoatView boatView, Repository repository)
         {
             _boatView = boatView;
@@ -35,6 +34,12 @@ namespace Controller
 
             return _boatView.GetViewOperation();
         }
+        public Enum DisplayMemberSelectedBoatOptions()
+        {
+            _boatView.DisplaySelectedBoatOptions();
+            return _boatView.GetViewOperation();
+        }
+
 
         // Displays
 
@@ -44,6 +49,17 @@ namespace Controller
                 _boatView.DisplayErrorBoatNotFound();
             else
                 _boatView.DisplaySingleBoat(boat);
+        }
+
+
+        public void DisplayManageMemberBoats(Member member)
+        {
+            List<Boat> boats = member.Boats;
+            boats.ForEach(boat => _boatView.DisplaySingleBoat(boat));
+        }
+        public void DisplayBoatDeleted()
+        {
+            _boatView.DisplayBoatDeleted();
         }
 
         public void DisplayErrorBoatNotFound()
@@ -126,17 +142,24 @@ namespace Controller
             _repository.AddBoatToMember(member, boat);
         }
 
-        public void DeleteBoat(Member selectedMember)
+        public bool DeleteBoat(Member selectedMember)
         {
             if (selectedMember.Boats.Count > 0)
             {
                 _boatView.DisplayMemberBoatInfo(selectedMember);
                 Boat boatFromSearch = FindBoatById();
+                if (boatFromSearch == null)
+                {
+                    _boatView.DisplayNoBoatWithId();
+                    return false;
+                }
                 _repository.RemoveBoatFromMember(selectedMember, boatFromSearch);
+                return true;
             }
             else
             {
                 _boatView.DisplayErrorBoatNotFound();
+                return false;
             }
         }
         public void ShowAllBoats()
